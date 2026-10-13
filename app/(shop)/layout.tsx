@@ -4,7 +4,7 @@ export default function ShopLayout({ children }: LayoutProps<'/'>) {
     return (
         <>
             <Header />
-            <div className="flex flex-1 flex-col">{children}</div>
+            <div className="pt-header flex flex-1 flex-col">{children}</div>
         </>
     );
 }
