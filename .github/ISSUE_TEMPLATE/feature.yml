@@ -1,0 +1,31 @@
+name: ✨ 기능 구현
+description: 새로운 기능/화면 작업
+title: '[Feat] '
+labels: ['feature']
+body:
+    - type: textarea
+      id: goal
+      attributes:
+          label: 🎯 무엇을 만드나요?
+          placeholder: 예) 메인 페이지에 상품 목록 카드 UI를 만든다
+      validations:
+          required: true
+    - type: textarea
+      id: todo
+      attributes:
+          label: ✅ 할 일 (하루 안에 끝낼 크기로 쪼개기)
+          value: |
+              - [ ] 
+              - [ ] 
+              - [ ]
+    - type: textarea
+      id: done
+      attributes:
+          label: 🏁 완료 기준
+          placeholder: 예) 목록 API 데이터를 받아 카드 8개가 그리드로 보인다
+      validations:
+          required: true
+    - type: textarea
+      id: ref
+      attributes:
+          label: 📎 참고 자료 (디자인, 문서 링크)
