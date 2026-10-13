@@ -1,0 +1,8 @@
+.li has_var ::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 10px;
+    padding-right: 30px;
+    border-right: 1px solid #cccc;
+}
