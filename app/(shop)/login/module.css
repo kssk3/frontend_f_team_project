@@ -1,0 +1,80 @@
+.wrap {
+  max-width: 672px;
+  padding: 40px 16px 80px;
+}
+
+.input {
+  height: 48px;
+  border-radius: 2px;
+  font-size: 14px;
+}
+
+.btnBlack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  border-radius: 2px;
+  background: #000;
+  color: #fff;
+  font-weight: 700;
+}
+.btnBlack:hover {
+  background: #222;
+  color: #fff;
+}
+
+.btnOutline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  border: 1px solid #000;
+  border-radius: 2px;
+  font-weight: 500;
+}
+
+.benefitTitle {
+  margin: 0;
+  padding: 20px;
+  background: #f8f8f8;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* 티켓 모양: 양옆이 반원으로 파인 쿠폰 */
+.ticket {
+  position: relative;
+  display: inline-block;
+  min-width: 72px;
+  padding: 8px 12px;
+  border: 1.5px solid #000;
+  border-radius: 3px;
+  background: #fff;
+  font-size: 12px;
+}
+.ticket::before,
+.ticket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid #000;
+  border-radius: 50%;
+  background: #fff;
+  transform: translateY(-50%);
+}
+.ticket::before {
+  left: -6px;
+  clip-path: inset(0 0 0 50%);
+}
+.ticket::after {
+  right: -6px;
+  clip-path: inset(0 50% 0 0);
+}
+
+/* 01번처럼 쿠폰이 겹쳐 보이는 효과 */
+.stack {
+  box-shadow: 5px -5px 0 -1.5px #fff, 5px -5px 0 0 #000;
+}
