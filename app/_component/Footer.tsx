@@ -1,12 +1,89 @@
+import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { Plus } from 'lucide-react';
+import { cn } from '@/shared/utils/cn';
+
+type FooterLink = {
+    href: string;
+    label: string;
+    isStrong?: boolean;
+};
+
+const helpLinks: FooterLink[] = [
+    { href: '/help/faq', label: 'FAQ' },
+    { href: '/help/notice', label: '공지사항' },
+    { href: '/help/store', label: '매장 안내' },
+    { href: '/help/partnership', label: '제휴문의' },
+    { href: '/help/vendor', label: '입점 및 매장 대관 문의' },
+    { href: '/help/membership', label: '멤버십 안내' },
+];
+
+const companyLinks: FooterLink[] = [
+    { href: '/company/about-eql', label: 'ABOUT EQL' },
+    { href: '/company/about', label: '회사소개' },
+    { href: '/company/terms', label: '이용약관' },
+    { href: '/company/privacy', label: '개인정보처리방침', isStrong: true },
+    { href: '/company/esg', label: 'ESG' },
+];
+
+// href가 없는 항목은 URL 확정 전까지 링크 없이 텍스트로만 표시
+const snsLinks: { href?: string; label: string }[] = [
+    {
+        href: 'https://www.youtube.com/channel/UCTEN3JABKulIgBQX6Z0Kizg',
+        label: 'YOUTUBE',
+    },
+    { label: 'FACEBOOK' },
+    { label: 'INSTAGRAM' },
+];
+
+const textLinkClass = 'not-italic underline';
+
+function FooterColumn({
+    className,
+    children,
+}: {
+    className?: string;
+    children: ReactNode;
+}) {
+    return (
+        <div className={cn('flex flex-col py-10 pl-[30px]', className)}>
+            {children}
+        </div>
+    );
+}
+
+function FooterLinkList({
+    title,
+    links,
+}: {
+    title: string;
+    links: FooterLink[];
+}) {
+    return (
+        <ul className="text-sm leading-[18px]">
+            <li className="mb-5 font-bold text-black">{title}</li>
+            {links.map(({ href, label, isStrong }) => (
+                <li key={href} className="mb-2.5">
+                    <Link href={href}>
+                        {isStrong ? (
+                            <strong className="underline">{label}</strong>
+                        ) : (
+                            label
+                        )}
+                    </Link>
+                </li>
+            ))}
+        </ul>
+    );
+}
 
 export default function Footer() {
     return (
         <footer className="border-muted border-t">
-            <div className="inner flex">
-                <div className="info text-faint border-muted flex w-1/2 flex-col border-r py-10 pl-[30px] text-sm leading-6">
+            <div className="flex">
+                <FooterColumn className="text-faint border-muted w-1/2 border-r text-sm leading-6">
                     <address className="flex flex-col not-italic">
-                        <p className="title mb-5 font-bold text-black">
+                        <p className="mb-5 font-bold text-black">
                             WE ARE ALL EQL.
                         </p>
                         <p>
@@ -21,24 +98,22 @@ export default function Footer() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                <em className="not-italic underline">
+                                <em className={textLinkClass}>
                                     사업자 정보 확인
                                 </em>
                             </a>
                         </p>
                         <p>
                             통신판매업신고번호 제 2009-서울강남-00826호 /{' '}
-                            <a>
-                                <em className="not-italic underline">
-                                    하나은행 구매안전 서비스
-                                </em>
-                            </a>
+                            <em className={textLinkClass}>
+                                하나은행 구매안전 서비스
+                            </em>
                         </p>
                         <p>
                             개인정보보호 책임자 최원철 / 호스팅 서비스 (주)한섬
                         </p>
                     </address>
-                    <p className="footer_privacy mt-5 mb-13 text-[13px] leading-[1.53]">
+                    <p className="mt-5 mb-13 text-[13px] leading-[1.53]">
                         일부 상품의 경우 ㈜한섬은 통신판매의 당사자가 아닌
                         <br />
                         통신판매 중개자로서 상품, 상품정보, 거래에 대한 책임이
@@ -46,63 +121,31 @@ export default function Footer() {
                         <br />각 상품 페이지에서 구체적인 내용을 확인하시기
                         바랍니다.
                     </p>
-                    <p className="copy">
-                        COPYRIGHTⓒ 2023 HANDSOME. ALL RIGHTS RESERVED.
-                    </p>
-                </div>
-                <div className="help border-muted flex w-1/4 flex-col justify-between border-r py-10 pl-[30px]">
-                    <ul className="text-sm leading-[18px]">
-                        <li className="title mb-5 font-bold text-black">
-                            고객센터
-                        </li>
-                        <li className="mb-2.5">
-                            <a>FAQ</a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a>공지사항</a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a>매장 안내</a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a>제휴문의</a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a>입점 및 매장 대관 문의</a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a>멤버십 안내</a>
-                        </li>
-                    </ul>
-                    <div className="sns flex gap-[33px] text-sm leading-[18px] font-medium">
-                        <a>YOUTUBE</a>
-                        <a>FACEBOOK</a>
-                        <a>INSTAGRAM</a>
+                    <p>COPYRIGHTⓒ 2023 HANDSOME. ALL RIGHTS RESERVED.</p>
+                </FooterColumn>
+
+                <FooterColumn className="border-muted w-1/4 justify-between border-r">
+                    <FooterLinkList title={'고객센터'} links={helpLinks} />
+                    <div className="flex gap-[33px] text-sm leading-[18px] font-medium">
+                        {snsLinks.map(({ href, label }) =>
+                            href ? (
+                                <a
+                                    key={label}
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {label}
+                                </a>
+                            ) : (
+                                <span key={label}>{label}</span>
+                            ),
+                        )}
                     </div>
-                </div>
-                <div className="company flex w-1/4 flex-col justify-between py-10 pl-[30px]">
-                    <ul className="text-sm leading-[18px]">
-                        <li className="title mb-5 font-bold text-black">
-                            회사소개
-                        </li>
-                        <li className="mb-2.5">
-                            <a>ABOUT EQL</a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a>회사소개</a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a>이용약관</a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a className="font-bold text-black underline">
-                                개인정보처리방침
-                            </a>
-                        </li>
-                        <li className="mb-2.5">
-                            <a>ESG</a>
-                        </li>
-                    </ul>
+                </FooterColumn>
+
+                <FooterColumn className="w-1/4 justify-between">
+                    <FooterLinkList title={'회사소개'} links={companyLinks} />
                     <button
                         type="button"
                         className="flex items-center gap-[5px] text-sm leading-[18px] font-medium"
@@ -110,7 +153,7 @@ export default function Footer() {
                         FAMILY SITE
                         <Plus className="size-[18px]" strokeWidth={1.5} />
                     </button>
-                </div>
+                </FooterColumn>
             </div>
         </footer>
     );
