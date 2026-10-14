@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import gnbLogo from './images/gnb_logo.png';
 import type { ReactNode } from 'react';
-import { LucideIcon } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import {
     Search,
@@ -10,6 +9,7 @@ import {
     LogIn,
     StretchHorizontal,
     ShoppingBag,
+    LucideIcon,
 } from 'lucide-react';
 
 type GnbItemProps = {
@@ -76,8 +76,17 @@ export function GnbItem({
 export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
     return (
         <li>
-            <Link href={href} aria-label={label}>
+            <Link
+                href={href}
+                aria-label={label}
+                className="relative block size-7"
+            >
                 <Icon className="size-7" strokeWidth={1.5} />
+                {label === '장바구니' && (
+                    <span className="bg-point/90 absolute -top-[5px] left-[14px] h-[18px] w-[19px] rounded-full text-center text-[9px] leading-[19px] font-medium text-white">
+                        1
+                    </span>
+                )}
             </Link>
         </li>
     );
@@ -86,8 +95,8 @@ export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
 export default function Header() {
     return (
         <header className="fixed top-0 left-0 z-[501] flex h-[100px] w-full items-center gap-7.5 bg-white pr-[26px] pl-[30px]">
-            <h1 className="flex h-[100px] shrink-0 items-center">
-                <Link href="/" className="block">
+            <h1 className="flex h-[100px] shrink-0 pt-[30px]">
+                <Link href="/">
                     <Image
                         src={gnbLogo}
                         alt="EQL home"
