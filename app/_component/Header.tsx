@@ -1,22 +1,20 @@
 import type { ReactNode } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import Link from 'next/link';
 
 type GnbItemProps = {
     href: string;
-    children: React.ReactNode;
+    children: ReactNode;
     hasArrow?: boolean;
     hasBar?: boolean;
     isRed?: boolean;
 };
 
-const arrowClass =
-    "after:block after:h-[15px] after:w-[15px] after:bg-[url('/icons/arrow-gnb.png')] after:bg-no-repeat after:transition-transform group-hover:after:rotate-180";
-
 const barClass =
-    'flex items-center gap-[30px] after:block after:h-[10px] after:w-px after:border-r after:border-[#ccc]';
+    'flex items-center gap-[30px] after:block after:h-[10px] after:w-px after:border-r after:border-border';
 
-const redClass = 'text-[#ff0000]';
+const redClass = 'text-point';
 
 const menus = [
     { href: '/women', label: 'WOMEN', hasArrow: true },
@@ -40,12 +38,18 @@ export function GnbItem({
     isRed = false,
 }: GnbItemProps) {
     return (
-        <li className={`group ${hasBar ? barClass : ''}`}>
+        <li className={cn('group', hasBar && barClass)}>
             <Link
                 href={href}
-                className={`flex items-center ${hasArrow ? arrowClass : ''} ${isRed ? redClass : ''}`}
+                className={cn(
+                    'text-faint flex items-center gap-1 text-xs font-medium',
+                    isRed && redClass,
+                )}
             >
                 <span>{children}</span>
+                {hasArrow && (
+                    <ChevronDown className="size-[15px] transition-transform group-hover:rotate-180" />
+                )}
             </Link>
         </li>
     );
@@ -53,7 +57,7 @@ export function GnbItem({
 
 export default function Header() {
     return (
-        <header className="header mx-[5px] flex h-[100px] w-full items-center pr-[26px] pl-[30px]">
+        <header className="fixed top-0 left-0 z-[501] flex h-[100px] w-full items-center gap-3 bg-white pr-[26px] pl-[30px]">
             <h1 className="flex h-[100px] items-center">EQL</h1>
             <nav className="h-12 w-full flex-1 justify-between">
                 <ul className="mr-[30px] flex h-full items-center gap-[30px]">
