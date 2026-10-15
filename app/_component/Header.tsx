@@ -22,7 +22,7 @@ const utilMenus = [
     { href: '/mypage', label: '마이페이지', Icon: User },
     { href: '/login', label: '로그인', Icon: LogIn },
     { href: '/equal', label: '이퀄', Icon: StretchHorizontal },
-    { href: '/cart/notlogin', label: '장바구니', Icon: ShoppingBag },
+    { href: '/cart/empty', label: '장바구니', Icon: ShoppingBag },
 ];
 
 export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
