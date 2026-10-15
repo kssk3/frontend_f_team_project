@@ -48,7 +48,7 @@ export default function NotLoginCartPage(): React.JSX.Element {
 
                     {/* 쇼핑 계속하기 버튼*/}
                     <Link
-                        href="/main"
+                        href="/"
                         className="flex h-[50px] w-[200px] items-center justify-center rounded border-[1.8px] border-black font-medium"
                     >
                         쇼핑 계속하기
