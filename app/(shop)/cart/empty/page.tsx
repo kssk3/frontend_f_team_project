@@ -4,41 +4,21 @@ import { GoChevronRight } from 'react-icons/go'; // > 오른쪽 화살표
 // 다음 페이지로이동
 import Link from 'next/link';
 
-// 단계 표시 변수
-const CartStep = ['01. CART', '02. ORDER', '03. ORDER COMPLETED'];
+// 장바구니 스텝 컴포넌트 불러오기
+import CheckoutStep from '@/domains/checkout/components/CheckoutStep';
+
 
 // 로그인 상태 변수 (true : 로그인 / false : 비로그인(default))
 const isLoggedIn = false ;
 
 export default function EmptyCartPage(): React.JSX.Element {
-    // 현재 단계 (0 : cart(기본) / 1 : 0rder / 2 : order complered)
-    const currentStep = 0;
 
     // 1) 장바구니 비었을때
     return (
         <main>
             <div className="mt-[60px] mr-[30px] ml-[30px]">
                 {/* ① 단계 표시 영역*/}
-                <ol className="flex gap-3 text-lg font-semibold">
-                    {CartStep.map((step, index) => (
-                        // 글자와 화살표 높이 맞추기
-                        <li key={step} className="flex items-center gap-3">
-                            <span
-                                className={
-                                    currentStep === index
-                                        ? 'text-black'
-                                        : 'text-faint'
-                                }
-                            >
-                                {step}
-                            </span>
-                            {/* index가 2보다 작을 때만 아이콘(화살표) 표시 */}
-                            {index < 2 && (
-                                <GoChevronRight className="text-faint" />
-                            )}
-                        </li>
-                    ))}
-                </ol>
+                < CheckoutStep />
 
                 {/* ② 빈 장바구니 영역 */}
                 <div className="flex flex-col items-center pt-[100px] pb-[300px]">
