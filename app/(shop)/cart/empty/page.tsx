@@ -18,7 +18,7 @@ export default function EmptyCartPage(): React.JSX.Element {
         <main>
             <div className="mt-[60px] mr-[30px] ml-[30px]">
                 {/* ① 단계 표시 영역*/}
-                < CheckoutStep />
+                < CheckoutStep currentStep={0}/>
 
                 {/* ② 빈 장바구니 영역 */}
                 <div className="flex flex-col items-center pt-[100px] pb-[300px]">

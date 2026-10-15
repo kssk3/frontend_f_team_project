@@ -8,9 +8,10 @@ import { GoChevronRight } from 'react-icons/go'; // > 오른쪽 화살표
 const CartStep = ['01. CART', '02. ORDER', '03. ORDER COMPLETED'];
 
 
-export default function CheckoutStep(): React.JSX.Element {
-    // 현재 단계 (0 : cart / 1 : order / 2 : order completed) - 지금은 임시로 0 고정
-    const currentStep = 0 ; 
+// currentStep : 강조할 단계 (0 : cart / 1 : order / 2 : order completed)
+export default function CheckoutStep(
+    {currentStep} : {currentStep : number }
+    ): React.JSX.Element {
 
     return (
         
