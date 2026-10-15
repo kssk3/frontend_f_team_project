@@ -8,7 +8,7 @@ import Link from 'next/link';
 const CartStep = ['01. CART', '02. ORDER', '03. ORDER COMPLETED'];
 
 // 로그인 상태 변수 (true : 로그인 / false : 비로그인(default))
-const isLoggedIn = false ;
+const isLoggedIn = true ;
 
 export default function EmptyCartPage(): React.JSX.Element {
     // 현재 단계 (0 : cart(기본) / 1 : 0rder / 2 : order complered)
