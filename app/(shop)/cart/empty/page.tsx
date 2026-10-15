@@ -7,6 +7,9 @@ import Link from 'next/link';
 // 단계 표시 변수
 const CartStep = ['01. CART', '02. ORDER', '03. ORDER COMPLETED'];
 
+// 로그인 상태 변수 (true : 로그인 / false : 비로그인(default))
+const isLoggedIn = false ;
+
 export default function EmptyCartPage(): React.JSX.Element {
     // 현재 단계 (0 : cart(기본) / 1 : 0rder / 2 : order complered)
     const currentStep = 0;
@@ -55,18 +58,19 @@ export default function EmptyCartPage(): React.JSX.Element {
                     </Link>
 
                     {/* 비로그인시에만 보여주는 페이지 : 로그인 유도 링크 */}
-
-                    <Link
-                        href="/login"
-                        className="mt-[40px] flex items-center font-medium"
-                    >
-                        로그인 후 더 많은 혜택을 받으세요
-                        <GoChevronRight />
-                    </Link>
+                    {!isLoggedIn && (
+                        <Link
+                            href="/login"
+                            className="mt-[40px]
+                            flex items-center
+                            font-medium">
+                            로그인 후 더 많은 혜택을 받으세요.
+                            <GoChevronRight />
+                        </Link>
+                    )} 
                 </div>
             </div>
         </main>
     );
 }
 
-// 2) 장바구니 채웠을때
