@@ -20,7 +20,9 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     rules: {
+      // *.module.css is excluded so Turbopack keeps treating it as a CSS Module
       "*.css": {
+        condition: { not: { path: "*.module.css" } },
         loaders: ["@tailwindcss/turbopack"],
         as: "*.css",
       },

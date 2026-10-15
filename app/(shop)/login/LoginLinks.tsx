@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./LoginLinks.module.css";
+import styles from "./login.module.css";
 
 const links = [
   { href: "/member/non-member-order", label: "비회원 주문조회" },
@@ -9,7 +9,7 @@ const links = [
 
 export default function LoginLinks() {
   return (
-    <div className="d-flex justify-content-center align-items-center my-4">
+    <div className="mt-7.5 mb-15 flex items-center justify-center">
       {links.map((link) => (
         <Link key={link.href} href={link.href} className={styles.item}>
           {link.label}
