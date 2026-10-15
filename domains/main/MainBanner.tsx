@@ -7,12 +7,13 @@ import { mockBanners } from './mockBanners';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
+import BannerBadge from './BannerBadge';
 
 export default function MainBanner() {
     const [current, setCurrent] = useState(0);
 
     return (
-        <section className="overflow-hidden">
+        <section className="overflow-hidden pb-[calc(var(--badge-drop)_+_35px)] [--badge-drop:62px] md:[--badge-drop:105px] xl:[--badge-drop:120px] 2xl:[--badge-drop:135px]">
             <Swiper
                 modules={[Autoplay]}
                 loop
@@ -37,21 +38,16 @@ export default function MainBanner() {
                                     className="object-cover"
                                 />
                             </div>
-                            <div className="mt-4">
-                                <p className="text-lg font-bold">
-                                    {banner.brand}
-                                </p>
-                                <p className="text-sm text-neutral-500">
-                                    {banner.benefit}
-                                </p>
-                            </div>
                         </Link>
                     </SwiperSlide>
                 ))}
+                <div slot="container-end">
+                    <BannerBadge
+                        brand={mockBanners[current].brand}
+                        benefit={mockBanners[current].benefit}
+                    />
+                </div>
             </Swiper>
-            <p className="mt-2 text-center text-sm">
-                {current + 1} / {mockBanners.length}
-            </p>
         </section>
     );
 }

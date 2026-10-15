@@ -63,7 +63,7 @@ export function GnbItem({
             <Link
                 href={href}
                 className={cn(
-                    'text-faint flex items-center gap-1 text-xs leading-[15px] font-medium',
+                    'text-faint flex items-center gap-1 text-xs leading-[15px] font-medium whitespace-nowrap',
                     isRed && redClass,
                 )}
             >
@@ -94,7 +94,7 @@ export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
 
 export default function Header() {
     return (
-        <header className="fixed top-0 left-0 z-[501] flex h-[100px] w-full items-center gap-7.5 bg-white pr-[26px] pl-[30px]">
+        <header className="fixed top-0 left-0 z-[501] flex h-[100px] w-full min-w-[1280px] items-center gap-7.5 bg-white pr-[26px] pl-[30px]">
             <h1 className="flex h-[100px] shrink-0 pt-[30px]">
                 <Link href="/">
                     <Image

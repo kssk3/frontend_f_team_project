@@ -55,6 +55,16 @@
     --spacing-gutter: 30px;
     --text-title: 20px;
     --text-banner: 28px;
+    --animate-text-flow: text-flow 20s linear infinite;
+
+    @keyframes text-flow {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-100%);
+        }
+    }
 }
 
 :root {
