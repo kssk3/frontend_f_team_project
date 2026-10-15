@@ -19,9 +19,9 @@ export default function TopButton() {
             type="button"
             id="topScroll"
             onClick={scrollTop}
-            className="fixed right-[30px] bottom-[30px]"
+            className="fixed right-[30px] bottom-[430px]"
         >
-            <BsArrowUpCircleFill />
+            <BsArrowUpCircleFill className="text-10" />
         </button>
     );
 }

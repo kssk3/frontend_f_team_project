@@ -1,4 +1,5 @@
 import DetailGallery from '@/domains/products/components/DetailGallery';
+import DetailPurchasePanel from '@/domains/products/components/DetailPurchasePanel';
 
 import Link from "next/link";
 import { FiChevronRight } from "react-icons/fi";
@@ -25,8 +26,11 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                 <span className="font-medium text-neutral-900">상품 상세({id})</span>
             </nav>
         
-            <div className="mt-6 lg:sticky lg:top-[calc(var(--spacing-header)+1rem)] lg:self-start">
-                <DetailGallery title="상품" count={6} />
+            <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+                <div className="lg:sticky lg:top-[calc(var(--spacing-header)+1rem)] lg:self-start">
+                    <DetailGallery title="상품" count={6} />
+                </div>
+                <DetailPurchasePanel />
             </div>
         </main>
      );
