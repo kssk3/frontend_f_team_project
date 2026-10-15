@@ -17,8 +17,11 @@ export default function EmptyCartPage(): React.JSX.Element {
     return (
         <main>
             <div className="mt-[60px] mr-[30px] ml-[30px]">
+
                 {/* ① 단계 표시 영역*/}
-                < CheckoutStep currentStep={0}/>
+                <div className='mb-[60px]'>
+                    < CheckoutStep currentStep={0}/>
+                </div>
 
                 {/* ② 빈 장바구니 영역 */}
                 <div className="flex flex-col items-center pt-[100px] pb-[300px]">
@@ -29,9 +32,9 @@ export default function EmptyCartPage(): React.JSX.Element {
                         </p>
                     </div>
 
-                    {/* 쇼핑 계속하기 버튼*/}
+                    {/* 쇼핑 계속하기 버튼 - main page*/}
                     <Link
-                        href="/"
+                        href="/"  
                         className="flex h-[50px] w-[200px] items-center justify-center rounded border-[1.8px] border-black font-medium"
                     >
                         쇼핑 계속하기
