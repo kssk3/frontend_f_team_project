@@ -1,8 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import gnbLogo from './images/gnb_logo.png';
-import type { ReactNode } from 'react';
-import { cn } from '@/shared/utils/cn';
+import GnbMenu from './gnb/GnbMenu';
 import {
     Search,
     User,
@@ -12,37 +11,11 @@ import {
     LucideIcon,
 } from 'lucide-react';
 
-type GnbItemProps = {
-    href: string;
-    children: ReactNode;
-    hasBar?: boolean;
-    isRed?: boolean;
-};
-
 type UtilItemProps = {
     href: string;
     icon: LucideIcon;
     label?: string;
 };
-
-const barClass =
-    'flex items-center gap-[30px] after:block after:h-[10px] after:w-px after:border-r after:border-border';
-
-const redClass = 'text-point font-bold';
-
-const menus = [
-    { href: '/women', label: 'WOMEN' },
-    { href: '/men', label: 'MEN' },
-    { href: '/life', label: 'LIFE', hasBar: true },
-    { href: '/brand', label: 'BRAND' },
-    { href: '/exclusive', label: 'EQL EXCLUSIVE' },
-    { href: '/performance', label: 'PERFORMANCE CLUB' },
-    { href: '/outlet', label: 'OUTLET' },
-    { href: '/event', label: 'EVENT', isRed: true },
-    { href: '/discover', label: 'DISCOVER' },
-    { href: '/shop-in-shop', label: 'SHOP IN SHOP', hasBar: true },
-    { href: '/curation', label: 'Mid Season Curation + 1', isRed: true },
-];
 
 const utilMenus = [
     { href: '/search', label: '검색', Icon: Search },
@@ -51,27 +24,6 @@ const utilMenus = [
     { href: '/equal', label: '이퀄', Icon: StretchHorizontal },
     { href: '/cart/notlogin', label: '장바구니', Icon: ShoppingBag },
 ];
-
-export function GnbItem({
-    href,
-    children,
-    hasBar = false,
-    isRed = false,
-}: GnbItemProps) {
-    return (
-        <li className={cn('group', hasBar && barClass)}>
-            <Link
-                href={href}
-                className={cn(
-                    'text-faint flex items-center gap-1 text-xs leading-[15px] font-medium whitespace-nowrap',
-                    isRed && redClass,
-                )}
-            >
-                <span>{children}</span>
-            </Link>
-        </li>
-    );
-}
 
 export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
     return (
@@ -107,18 +59,7 @@ export default function Header() {
                 </Link>
             </h1>
             <nav className="mt-9 flex flex-1 items-start justify-between self-start">
-                <ul className="mr-[30px] flex items-start gap-[30px]">
-                    {menus.map((menu) => (
-                        <GnbItem
-                            key={menu.label}
-                            href={menu.href}
-                            hasBar={menu.hasBar}
-                            isRed={menu.isRed}
-                        >
-                            {menu.label}
-                        </GnbItem>
-                    ))}
-                </ul>
+                <GnbMenu />
                 <ul className="flex items-start gap-[30px]">
                     {utilMenus.map(({ href, label, Icon }) => (
                         <UtilItem
