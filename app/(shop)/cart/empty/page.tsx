@@ -7,7 +7,7 @@ import Link from 'next/link';
 // 단계 표시 변수
 const CartStep = ['01. CART', '02. ORDER', '03. ORDER COMPLETED'];
 
-export default function NotLoginCartPage(): React.JSX.Element {
+export default function EmptyCartPage(): React.JSX.Element {
     // 현재 단계 (0 : cart(기본) / 1 : 0rder / 2 : order complered)
     const currentStep = 0;
 
