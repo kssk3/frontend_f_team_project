@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1337 827" width="1337" height="827">
+  <!-- 학습용 오리지널 다람쥐 캐릭터 (mock id 1 · MOA ATELIER · FW 트렌치코트) -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6EBDD"/>
+      <stop offset="1" stop-color="#EBD8BF"/>
+    </linearGradient>
+    <radialGradient id="fur" cx="0.38" cy="0.32" r="0.75">
+      <stop offset="0" stop-color="#CF935C"/>
+      <stop offset="0.6" stop-color="#B07040"/>
+      <stop offset="1" stop-color="#8E5530"/>
+    </radialGradient>
+    <radialGradient id="cream" cx="0.45" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#FFF6E8"/>
+      <stop offset="1" stop-color="#EED8B8"/>
+    </radialGradient>
+    <radialGradient id="coat" cx="0.35" cy="0.2" r="0.9">
+      <stop offset="0" stop-color="#DDAE72"/>
+      <stop offset="1" stop-color="#B07A42"/>
+    </radialGradient>
+    <radialGradient id="beret" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#A3434D"/>
+      <stop offset="1" stop-color="#682129"/>
+    </radialGradient>
+    <linearGradient id="bag" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3F7867"/>
+      <stop offset="1" stop-color="#28503F"/>
+    </linearGradient>
+    <radialGradient id="tail" cx="0.4" cy="0.3" r="0.85">
+      <stop offset="0" stop-color="#C4864F"/>
+      <stop offset="1" stop-color="#85502E"/>
+    </radialGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <!-- 배경 -->
+  <rect width="1337" height="827" fill="url(#bg)"/>
+
+  <!-- 가을 낙엽 (양옆 여백 장식) -->
+  <g fill="#D19A5B" opacity="0.5">
+    <path d="M0 -18 Q14 0 0 18 Q-14 0 0 -18 Z" transform="translate(250 200) rotate(35) scale(1.4)"/>
+    <path d="M0 -18 Q14 0 0 18 Q-14 0 0 -18 Z" transform="translate(180 560) rotate(-20) scale(1.1)"/>
+    <path d="M0 -18 Q14 0 0 18 Q-14 0 0 -18 Z" transform="translate(1080 260) rotate(60) scale(1.2)"/>
+    <path d="M0 -18 Q14 0 0 18 Q-14 0 0 -18 Z" transform="translate(1150 610) rotate(-45) scale(1.5)"/>
+  </g>
+
+  <!-- 바닥 그림자 -->
+  <ellipse cx="668" cy="712" rx="210" ry="24" fill="#5A3A20" opacity="0.18" filter="url(#soft)"/>
+
+  <!-- 꼬리 -->
+  <path d="M735 690 C880 700 965 600 955 480 C945 380 890 300 815 285 C830 330 860 390 855 445 C850 510 800 560 745 580 Z" fill="url(#tail)"/>
+  <path d="M790 662 C890 652 937 572 930 482" stroke="#EBCBA2" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <path d="M760 640 C870 640 915 560 905 470 C898 400 865 340 830 310" stroke="#4E2C18" stroke-width="14" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- 발 -->
+  <ellipse cx="625" cy="700" rx="30" ry="15" fill="#7A4526"/>
+  <ellipse cx="711" cy="700" rx="30" ry="15" fill="#7A4526"/>
+
+  <!-- 트렌치코트 몸통 -->
+  <path d="M610 470 Q668 455 726 470 L770 660 Q775 690 745 692 L591 692 Q561 690 566 660 Z" fill="url(#coat)"/>
+  <!-- 셔츠 + 라펠 -->
+  <path d="M640 468 L668 540 L696 468 Z" fill="#F7F1E6"/>
+  <path d="M640 468 L668 540 L620 502 Z" fill="#B88247"/>
+  <path d="M696 468 L668 540 L716 502 Z" fill="#B88247"/>
+  <!-- 앞여밈 + 단추 -->
+  <path d="M676 540 L676 690" stroke="#9E6B38" stroke-width="3" opacity="0.7"/>
+  <g fill="#5B3A22">
+    <circle cx="648" cy="560" r="7"/>
+    <circle cx="700" cy="560" r="7"/>
+    <circle cx="648" cy="645" r="7"/>
+    <circle cx="700" cy="645" r="7"/>
+  </g>
+  <!-- 벨트 -->
+  <path d="M580 590 L757 590 L761 610 L576 610 Z" fill="#A8723F"/>
+  <rect x="656" y="586" width="26" height="28" rx="3" fill="none" stroke="#E9C995" stroke-width="4"/>
+
+  <!-- 왼팔 + 쇼핑백 -->
+  <path d="M606 495 Q575 545 572 590" stroke="#BF8A50" stroke-width="44" fill="none" stroke-linecap="round"/>
+  <rect x="520" y="620" width="96" height="86" rx="10" fill="url(#bag)"/>
+  <path d="M542 622 Q572 582 596 622" stroke="#21443A" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <circle cx="572" cy="600" r="19" fill="url(#fur)"/>
+
+  <!-- 오른팔 -->
+  <path d="M730 495 Q765 545 765 595" stroke="#BF8A50" stroke-width="44" fill="none" stroke-linecap="round"/>
+  <circle cx="765" cy="605" r="19" fill="url(#fur)"/>
+
+  <!-- 목 그림자 -->
+  <ellipse cx="668" cy="476" rx="95" ry="18" fill="#5A3A20" opacity="0.2" filter="url(#soft)"/>
+
+  <!-- 귀 -->
+  <circle cx="548" cy="262" r="36" fill="url(#fur)"/>
+  <circle cx="548" cy="265" r="20" fill="#E3A98E"/>
+  <circle cx="788" cy="262" r="36" fill="url(#fur)"/>
+  <circle cx="788" cy="265" r="20" fill="#E3A98E"/>
+
+  <!-- 머리 -->
+  <ellipse cx="668" cy="350" rx="150" ry="128" fill="url(#fur)"/>
+  <ellipse cx="668" cy="400" rx="100" ry="66" fill="url(#cream)"/>
+
+  <!-- 다람쥐 줄무늬 (이마 + 눈 옆) -->
+  <path d="M668 270 L668 305" stroke="#5A3420" stroke-width="16" stroke-linecap="round" opacity="0.8"/>
+  <path d="M600 346 Q578 338 552 324" stroke="#F4E2C6" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M604 366 Q578 360 546 350" stroke="#5A3420" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M736 346 Q758 338 784 324" stroke="#F4E2C6" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M732 366 Q758 360 790 350" stroke="#5A3420" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- 볼터치 -->
+  <ellipse cx="588" cy="412" rx="26" ry="15" fill="#E58F78" opacity="0.4"/>
+  <ellipse cx="748" cy="412" rx="26" ry="15" fill="#E58F78" opacity="0.4"/>
+
+  <!-- 눈 -->
+  <ellipse cx="622" cy="365" rx="12" ry="14" fill="#1E1410"/>
+  <ellipse cx="714" cy="365" rx="12" ry="14" fill="#1E1410"/>
+  <circle cx="626" cy="359" r="4" fill="#FFFFFF"/>
+  <circle cx="718" cy="359" r="4" fill="#FFFFFF"/>
+
+  <!-- 코 + 입 + 앞니 -->
+  <path d="M658 392 Q668 386 678 392 Q676 402 668 405 Q660 402 658 392 Z" fill="#4A2B1E"/>
+  <path d="M668 405 L668 413" stroke="#4A2B1E" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M652 414 Q660 424 668 414 Q676 424 684 414" stroke="#4A2B1E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <rect x="662" y="417" width="12" height="11" rx="2" fill="#FFFFFF" stroke="#E2D3BE" stroke-width="1.5"/>
+  <path d="M668 417 L668 428" stroke="#E2D3BE" stroke-width="1.5"/>
+
+  <!-- 베레모 -->
+  <ellipse cx="676" cy="262" rx="110" ry="22" fill="#3A1A10" opacity="0.15" filter="url(#soft)"/>
+  <ellipse cx="690" cy="238" rx="120" ry="46" fill="url(#beret)" transform="rotate(-12 690 238)"/>
+  <circle cx="702" cy="192" r="9" fill="#682129"/>
+</svg>
