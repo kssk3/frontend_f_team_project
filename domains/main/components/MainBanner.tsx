@@ -23,7 +23,7 @@ export default function MainBanner() {
                 speed={300}
                 autoplay={{ delay: 3000, disableOnInteraction: true }}
                 onSlideChange={(swiper) => setCurrent(swiper.realIndex)}
-                className="!overflow-visible"
+                className="!overflow-visible bg-black !pt-[10px]"
             >
                 {mockBanners.map((banner, index) => (
                     <SwiperSlide key={banner.id}>
