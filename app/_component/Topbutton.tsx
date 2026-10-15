@@ -9,11 +9,20 @@ export default function TopButton() {
     // ArrowUp 버튼 보이기 여부 (true : 보임 / false : 숨기기)
     const [isVisible, setVisible] = useState(true) ;
 
-    // 스크롤 위치 확인 
+    // 스크롤 위치 확인 및 ArrowUp 버튼 보이기 여부 수정
     const scrollPosition = () => {
         if (window.scrollY > 100) {setVisible(true)}
         else {setVisible(false)}
     } ;
+
+    // useEffect : 스크롤 위치 확인하여 스크롤 동작
+    useEffect( () => {
+        scrollPosition() ; 
+
+        // scroll을 할때마다 스크롤 위치 확인
+        window.addEventListener('scroll', scrollPosition) 
+
+    }) ;
 
     // event 적용 : 아이콘을 클릭하면 맨 위로 이동
     const scrollTop = () => {
