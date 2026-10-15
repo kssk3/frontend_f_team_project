@@ -49,7 +49,7 @@ const utilMenus = [
     { href: '/mypage', label: '마이페이지', Icon: User },
     { href: '/login', label: '로그인', Icon: LogIn },
     { href: '/equal', label: '이퀄', Icon: StretchHorizontal },
-    { href: '/cart', label: '장바구니', Icon: ShoppingBag },
+    { href: '/cart/notlogin', label: '장바구니', Icon: ShoppingBag },
 ];
 
 export function GnbItem({
@@ -84,7 +84,7 @@ export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
                 <Icon className="size-7" strokeWidth={1.5} />
                 {label === '장바구니' && (
                     <span className="bg-point/90 absolute -top-[5px] left-[14px] h-[18px] w-[19px] rounded-full text-center text-[9px] leading-[19px] font-medium text-white">
-                        1
+                        0
                     </span>
                 )}
             </Link>

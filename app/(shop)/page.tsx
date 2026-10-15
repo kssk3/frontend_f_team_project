@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
-import MainBanner from '@/domains/main/MainBanner';
+import MainBanner from '@/domains/main/components/MainBanner';
+import RecommendSection from '@/domains/main/components/RecommendSection';
 
 export default function MainPage(): React.JSX.Element {
     return (
@@ -9,6 +10,7 @@ export default function MainPage(): React.JSX.Element {
             }
         >
             <MainBanner />
+            <RecommendSection />
         </Suspense>
     );
 }
