@@ -1,4 +1,4 @@
-import type { BannerItem } from './types';
+import type { BannerItem } from '../types';
 
 // 학습용 mock 데이터
 // - 브랜드명은 모두 가상의 이름입니다 (실제 브랜드 상표 사용 X)
@@ -7,7 +7,8 @@ import type { BannerItem } from './types';
 // - href의 /events/* 라우트는 아직 없으므로 클릭 시 404가 정상입니다
 const BANNER_SIZE = '1337/827';
 
-const picsum = (seed: string) => `https://picsum.photos/seed/${seed}/${BANNER_SIZE}`;
+const picsum = (seed: string) =>
+    `https://picsum.photos/seed/${seed}/${BANNER_SIZE}`;
 
 export const mockBanners: BannerItem[] = [
     {
