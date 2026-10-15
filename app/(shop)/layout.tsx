@@ -1,6 +1,6 @@
 import Header from '../_component/Header';
 import Footer from '../_component/Footer';
-import TopButton from '../_component/Main';
+import TopButton from '../_component/Topbutton';
 
 export default function ShopLayout({ children }: LayoutProps<'/'>) {
     return (
