@@ -42,7 +42,8 @@ export default function TopButton() {
             id="topScroll"
             onClick={scrollTop}
             // className="fixed right-[30px] bottom-[30px]"
-            className={`sticky bottom-[30px] z-[500] mr-[30px] mb-[30px] self-end transition-opacity ${
+            // 오른쪽 아래 플로팅 요소(예: 메인 회원가입 토스트 칩)가 있으면 그 높이(--floating-bottom-offset)만큼 위로 비켜감
+            className={`sticky bottom-[calc(30px_+_var(--floating-bottom-offset,0px))] z-[500] mr-[30px] mb-[30px] self-end transition-[opacity,bottom] duration-300 motion-reduce:transition-none ${
                 isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
             } `}
         >
