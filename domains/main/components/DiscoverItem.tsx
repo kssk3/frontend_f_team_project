@@ -11,6 +11,7 @@ export default function DisCoverItem({
     eager?: boolean;
 }) {
     return (
+        // 카드 누르면 상품 상세로. id 가 URL 의 [id] 자리에 들어감 (/product/3)
         <Link href={`/product/${item.id}`} className="block">
             <div className="relative aspect-[3/4] overflow-hidden bg-[#f2f2f2]">
                 <Image
