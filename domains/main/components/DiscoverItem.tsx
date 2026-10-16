@@ -3,15 +3,22 @@ import Link from 'next/link';
 
 import { type DiscoverItem } from '@/domains/main/types';
 
-export default function DisCoverItem({ item }: { item: DiscoverItem }) {
+export default function DisCoverItem({
+    item,
+    eager = false,
+}: {
+    item: DiscoverItem;
+    eager?: boolean;
+}) {
     return (
-        <Link href={item.href} className="block">
+        <Link href={`/product/${item.id}`} className="block">
             <div className="relative aspect-[3/4] overflow-hidden bg-[#f2f2f2]">
                 <Image
                     src={item.image}
                     alt={item.alt}
                     fill
                     sizes="23vw"
+                    loading={eager ? 'eager' : 'lazy'}
                     className="object-contain"
                 />
             </div>

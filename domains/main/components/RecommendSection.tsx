@@ -38,9 +38,9 @@ export default function RecommendSection() {
                 onSlideChange={syncEdge}
                 onResize={syncEdge}
             >
-                {mockDiscover.map((item) => (
+                {mockDiscover.map((item, index) => (
                     <SwiperSlide key={item.id}>
-                        <DiscoverItem item={item} />
+                        <DiscoverItem item={item} eager={index < 5} />
                     </SwiperSlide>
                 ))}
             </Swiper>
