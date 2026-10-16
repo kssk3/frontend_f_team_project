@@ -28,13 +28,25 @@ const companyLinks: FooterLink[] = [
 
 // href가 없는 항목은 URL 확정 전까지 링크 없이 텍스트로만 표시
 const snsLinks: { href?: string; label: string }[] = [
-    {
-        href: 'https://www.youtube.com/channel/UCTEN3JABKulIgBQX6Z0Kizg',
-        label: 'YOUTUBE',
-    },
+    { label: 'YOUTUBE' },
     { label: 'FACEBOOK' },
     { label: 'INSTAGRAM' },
 ];
+
+// 학습용 가상 사업자 정보 — 실제 회사 · 인물 · 번호와 무관합니다
+// - 회사명은 mock 브랜드(OATLINE)에서 따옴
+// - 전화 · 사업자등록번호 · 신고번호는 실존 번호와 겹치지 않도록 형식만 맞추고 0으로 채움
+const company = {
+    name: '(주)오트라인리테일',
+    ceo: '이도윤',
+    address: '서울시 성동구 성수이로 77 오트라인빌딩',
+    phone: '1600-0000',
+    fax: '02-000-0000',
+    bizNumber: '000-00-00000',
+    mailOrderNumber: '제 2026-서울성동-0000호',
+    privacyOfficer: '정하린',
+    copyright: 'OATLINE RETAIL',
+};
 
 const textLinkClass = 'not-italic underline';
 
@@ -87,41 +99,39 @@ export default function Footer() {
                             WE ARE ALL EQL.
                         </p>
                         <p>
-                            (주) 한섬 / 대표이사 김민덕 / 서울시 강남구 도산대로
-                            523 한섬빌딩
-                        </p>
-                        <p>문의전화 1661-8858 (유료) / 팩스 02-476-8169</p>
-                        <p>
-                            사업자등록번호 120-81-26337{' '}
-                            <a
-                                href="https://ftc.go.kr/bizCommPop.do?wrkr_no=1208126337"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <em className={textLinkClass}>
-                                    사업자 정보 확인
-                                </em>
-                            </a>
+                            {company.name} / 대표이사 {company.ceo} /{' '}
+                            {company.address}
                         </p>
                         <p>
-                            통신판매업신고번호 제 2009-서울강남-00826호 /{' '}
-                            <em className={textLinkClass}>
-                                하나은행 구매안전 서비스
-                            </em>
+                            문의전화 {company.phone} (유료) / 팩스 {company.fax}
+                        </p>
+                        {/* 가상 번호라 공정위 사업자 조회 링크는 연결하지 않음 */}
+                        <p>
+                            사업자등록번호 {company.bizNumber}{' '}
+                            <em className={textLinkClass}>사업자 정보 확인</em>
                         </p>
                         <p>
-                            개인정보보호 책임자 최원철 / 호스팅 서비스 (주)한섬
+                            통신판매업신고번호 {company.mailOrderNumber} /{' '}
+                            <em className={textLinkClass}>구매안전 서비스</em>
+                        </p>
+                        <p>
+                            개인정보보호 책임자 {company.privacyOfficer} /
+                            호스팅 서비스 {company.name}
                         </p>
                     </address>
                     <p className="mt-5 mb-13 text-[13px] leading-[1.53]">
-                        일부 상품의 경우 ㈜한섬은 통신판매의 당사자가 아닌
+                        일부 상품의 경우 {company.name}은 통신판매의 당사자가
+                        아닌
                         <br />
                         통신판매 중개자로서 상품, 상품정보, 거래에 대한 책임이
                         제한될 수 있으므로,
                         <br />각 상품 페이지에서 구체적인 내용을 확인하시기
                         바랍니다.
                     </p>
-                    <p>COPYRIGHTⓒ 2023 HANDSOME. ALL RIGHTS RESERVED.</p>
+                    <p>
+                        COPYRIGHTⓒ 2026 {company.copyright}. ALL RIGHTS
+                        RESERVED.
+                    </p>
                 </FooterColumn>
 
                 <FooterColumn className="border-muted w-1/4 justify-between border-r">
