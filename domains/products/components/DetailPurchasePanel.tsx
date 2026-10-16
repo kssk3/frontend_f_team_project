@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { cn } from '@/shared/utils/cn';
+import { useRouter } from 'next/navigation';
+
 
 // react-icons 컴포넌트 활용
 import { FiMinus, FiPlus } from 'react-icons/fi';
@@ -62,6 +64,12 @@ export default function DetailPurchasePanel() {
     const [size, setSize] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [liked, setLiked] = useState(false);
+    const router = useRouter();
+
+    const goCart = () => {
+        if (size === null) return;
+        router.push('/cart');
+    };
 
     const picked = SIZES.find((s) => s.label === size);
     // 옵션별 추가금액 없다면 삭제
@@ -221,6 +229,7 @@ export default function DetailPurchasePanel() {
             <div className="mt-4 hidden gap-2 md:flex">
                 <button
                     type="button"
+                    onClick={goCart}
                     className="h-12 flex-1 border border-neutral-900 text-sm font-bold"
                 >
                     장바구니에 담기
@@ -243,7 +252,7 @@ export default function DetailPurchasePanel() {
                 >
                     <LikeIcon size={20} />
                 </button>
-                <button type="button" className="h-12 flex-1 border border-neutral-900 text-sm font-bold">
+                <button type="button" onClick={goCart}className="h-12 flex-1 border border-neutral-900 text-sm font-bold">
                     장바구니에 담기
                 </button>
                 <button
