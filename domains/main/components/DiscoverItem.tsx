@@ -11,7 +11,7 @@ export default function DisCoverItem({
     eager?: boolean;
 }) {
     return (
-        <Link href={item.href} className="block">
+        <Link href={`/product/${item.id}`} className="block">
             <div className="relative aspect-[3/4] overflow-hidden bg-[#f2f2f2]">
                 <Image
                     src={item.image}
