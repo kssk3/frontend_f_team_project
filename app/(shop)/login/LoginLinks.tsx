@@ -9,7 +9,7 @@ const links = [
 
 export default function LoginLinks() {
   return (
-    <div className="mt-7.5 mb-15 flex items-center justify-center">
+    <div className="mt-7.5 mb-7.5 flex items-center justify-center">
       {links.map((link) => (
         <Link key={link.href} href={link.href} className={styles.item}>
           {link.label}
