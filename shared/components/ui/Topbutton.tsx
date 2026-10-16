@@ -7,22 +7,28 @@ import { BsArrowUpCircleFill } from 'react-icons/bs';
 
 export default function TopButton() {
     // ArrowUp 버튼 보이기 여부 (true : 보임 / false : 숨기기)
-    const [isVisible, setVisible] = useState(true) ;
+    const [isVisible, setVisible] = useState(false);
 
     // 스크롤 위치 확인 및 ArrowUp 버튼 보이기 여부 수정
-    const scrollPosition = () => {
-        if (window.scrollY > 100) {setVisible(true)}
-        else {setVisible(false)}
-    } ;
+    // const scrollPosition = () => {
+    //     if (window.scrollY > 100) {
+    //         setVisible(true);
+    //     } else {
+    //         setVisible(false);
+    //     }
+    // };
 
     // useEffect : 스크롤 위치 확인하여 스크롤 동작
-    useEffect( () => {
-        scrollPosition() ; 
+    useEffect(() => {
+        // 스크롤 이벤트가 왔을 때 콜백 안에서만 호출
+        const scrollPosition = () => setVisible(window.scrollY > 0);
+        // scrollPosition();
 
         // scroll을 할때마다 스크롤 위치 확인
-        window.addEventListener('scroll', scrollPosition) 
-
-    }) ;
+        window.addEventListener('scroll', scrollPosition, { passive: true });
+        // 해제 클린업 작업
+        return () => window.removeEventListener('scroll', scrollPosition);
+    }, []);
 
     // event 적용 : 아이콘을 클릭하면 맨 위로 이동
     const scrollTop = () => {
@@ -36,12 +42,10 @@ export default function TopButton() {
             id="topScroll"
             onClick={scrollTop}
             // className="fixed right-[30px] bottom-[30px]"
-            className={`
-                sticky 
-                    bottom-[30px] self-end mr-[30px] mb-[30px]
-                transition-opacity ${isVisible ? "opacity-100" : 
-                "pointer-events-none opacity-0"}
-                `}
+            // 오른쪽 아래 플로팅 요소(예: 메인 회원가입 토스트 칩)가 있으면 그 높이(--floating-bottom-offset)만큼 위로 비켜감
+            className={`sticky bottom-[calc(30px_+_var(--floating-bottom-offset,0px))] z-[500] mr-[30px] mb-[30px] self-end transition-[opacity,bottom] duration-300 motion-reduce:transition-none ${
+                isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
+            } `}
         >
             <BsArrowUpCircleFill className="text-[40px]" />
         </button>
