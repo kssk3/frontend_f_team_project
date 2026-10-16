@@ -42,7 +42,8 @@ export default function TopButton() {
             id="topScroll"
             onClick={scrollTop}
             // className="fixed right-[30px] bottom-[30px]"
-            className={`sticky bottom-[30px] z-[500] mr-[30px] mb-[30px] self-end transition-opacity ${
+            // 메인의 회원가입 토스트가 보이면 그 높이(--signup-toast-space)만큼 위로 비켜감
+            className={`sticky bottom-[calc(30px_+_var(--signup-toast-space,0px))] z-[500] mr-[30px] mb-[30px] self-end transition-[opacity,bottom] duration-300 ${
                 isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
             } `}
         >
