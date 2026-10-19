@@ -5,22 +5,19 @@ import { GoChevronRight } from 'react-icons/go'; // > 오른쪽 화살표
 import Link from 'next/link';
 
 // 장바구니 스텝 컴포넌트 불러오기
-import CheckoutStep from '@/domains/checkout/components/CheckoutStep';
-
+import CheckoutStep from '@/domains/cart/components/CheckoutStep';
 
 // 로그인 상태 변수 (true : 로그인 / false : 비로그인(default))
-const isLoggedIn = false ;
+const isLoggedIn = false;
 
 export default function EmptyCartPage(): React.JSX.Element {
-
     // 1) 장바구니 비었을때
     return (
         <main>
             <div className="mt-[60px] mr-[30px] ml-[30px]">
-
                 {/* ① 단계 표시 영역*/}
-                <div className='mb-[60px]'>
-                    < CheckoutStep currentStep={0}/>
+                <div className="mb-[60px]">
+                    <CheckoutStep currentStep={0} />
                 </div>
 
                 {/* ② 빈 장바구니 영역 */}
@@ -34,7 +31,7 @@ export default function EmptyCartPage(): React.JSX.Element {
 
                     {/* 쇼핑 계속하기 버튼 - main page*/}
                     <Link
-                        href="/"  
+                        href="/"
                         className="flex h-[50px] w-[200px] items-center justify-center rounded border-[1.8px] border-black font-medium"
                     >
                         쇼핑 계속하기
@@ -44,16 +41,14 @@ export default function EmptyCartPage(): React.JSX.Element {
                     {!isLoggedIn && (
                         <Link
                             href="/login"
-                            className="mt-[40px]
-                            flex items-center
-                            font-medium">
+                            className="mt-[40px] flex items-center font-medium"
+                        >
                             로그인 후 더 많은 혜택을 받으세요.
                             <GoChevronRight />
                         </Link>
-                    )} 
+                    )}
                 </div>
             </div>
         </main>
     );
 }
-
