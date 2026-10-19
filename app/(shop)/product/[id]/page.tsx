@@ -2,6 +2,7 @@ export const instant = false;
 
 import DetailGallery from '@/domains/products/components/DetailGallery';
 import DetailPurchasePanel from '@/domains/products/components/DetailPurchasePanel';
+import DetailTabs from '@/domains/products/components/DetailTabs';
 import { getProduct } from '@/domains/products/api/products';
 import { Suspense } from 'react';
 import Link from "next/link";
@@ -40,6 +41,14 @@ export default async function ProductDetailPage({params}: ProductDetailPageProps
                     </div>
                     <DetailPurchasePanel product={product} />
                 </div>
+
+                <DetailTabs
+                    description={
+                        <div className="py-20 text-center text-sm text-neutral-400">
+                            상품 설명이 들어갈 자리입니다.
+                        </div>
+                    }
+                />
             </main>
         </Suspense>
      );

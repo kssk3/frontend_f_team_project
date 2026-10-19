@@ -61,12 +61,7 @@ function BenefitRow({
 }
 
 // 구매 패널 컴포넌트 구성(사이즈, 수량, 찜하기)
-// 이 컴포넌트가 바깥(page.tsx)에서 받는 값. page 가 getProduct 로 찾은 상품을 넘겨준다
-interface DetailPurchasePanelProps {
-    product: Product;
-}
-
-export default function DetailPurchasePanel({ product }: DetailPurchasePanelProps) {
+export default function DetailPurchasePanel({product}: {product: Product}) {
     const [size, setSize] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
     const [liked, setLiked] = useState(false);
@@ -93,7 +88,7 @@ export default function DetailPurchasePanel({ product }: DetailPurchasePanelProp
                     <p className="text-xs font-bold tracking-wide text-neutral-900 underline">
                         브랜드명
                     </p>
-                    <h1 className="mt-2 text-lg leading-snug font-medium md:text-xl">{product.name}</h1>
+                    <h1 className="mt-2 text-lg leading-snug font-medium md:text-xl">상품명</h1>
                     <div className="mt-2 flex gap-1">
                         <span className="rounded border border-neutral-900 px-1.5 py-0.5 text-[10px] font-bold">
                             COUPON
@@ -200,7 +195,7 @@ export default function DetailPurchasePanel({ product }: DetailPurchasePanelProp
                 <div className="mt-4 bg-neutral-50 p-3">
                     <div className="flex items-center justify-between gap-2">
                         <p className="truncate text-sm">
-                            {product.name} / <span className="font-medium">{size}</span>
+                            상품명 / <span className="font-medium">{size}</span>
                         </p>
                         <div className="flex shrink-0 items-center border border-neutral-300 bg-white">
                             <button
@@ -258,7 +253,7 @@ export default function DetailPurchasePanel({ product }: DetailPurchasePanelProp
                 >
                     <LikeIcon size={20} />
                 </button>
-                <button type="button" onClick={goCart}className="h-12 flex-1 border border-neutral-900 text-sm font-bold">
+                <button type="button" onClick={goCart} className="h-12 flex-1 border border-neutral-900 text-sm font-bold">
                     장바구니에 담기
                 </button>
                 <button
