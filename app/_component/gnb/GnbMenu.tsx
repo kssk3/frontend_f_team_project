@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
-import { cn } from '@/shared/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { gnbMenus } from '@/app/_component/gnb/gnbMenus';
 import GnbPanel from '@/app/_component/gnb/GnbPanel';
 

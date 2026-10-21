@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { cn } from '@/shared/utils/cn';
+import { cn } from '@/shared/lib/cn';
 import { useRouter } from 'next/navigation';
 import type { Product } from '@/domains/products/types';
 
@@ -48,7 +48,9 @@ function BenefitRow({
             {/* group = 자식이 부모상태 확인하고 스타일 바꿀 수 있게 하는 표시 */}
             <summary className="flex cursor-pointer list-none items-center justify-between text-sm">
                 <span className="flex items-baseline gap-2">
-                    <span className="w-20 shrink-0 text-neutral-500">{label}</span>
+                    <span className="w-20 shrink-0 text-neutral-500">
+                        {label}
+                    </span>
                     <span className="font-medium">{summary}</span>
                 </span>
                 <ToggleIcon />
@@ -88,7 +90,9 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
                     <p className="text-xs font-bold tracking-wide text-neutral-900 underline">
                         브랜드명
                     </p>
-                    <h1 className="mt-2 text-lg leading-snug font-medium md:text-xl">상품명</h1>
+                    <h1 className="mt-2 text-lg leading-snug font-medium md:text-xl">
+                        상품명
+                    </h1>
                     <div className="mt-2 flex gap-1">
                         <span className="rounded border border-neutral-900 px-1.5 py-0.5 text-[10px] font-bold">
                             COUPON
@@ -119,14 +123,17 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
                     </p>
                     {/* items-baseline = 할인율과 판매가의 밑선을 맞춘다 */}
                     <p className="mt-1 flex items-baseline gap-2 text-2xl font-bold">
-                        <span className="text-red-600">{rateOf(SALE_PRICE)}%</span>
+                        <span className="text-red-600">
+                            {rateOf(SALE_PRICE)}%
+                        </span>
                         <span>{SALE_PRICE.toLocaleString('ko-KR')}</span>
                     </p>
                 </div>
                 <button
                     type="button"
-                    className="rounded border border-neutral-300 px-2 py-1 text-xs">
-                    { /*쿠폰 정책 추가되면 추가  onClick={() => setLiked(!liked)} */}
+                    className="rounded border border-neutral-300 px-2 py-1 text-xs"
+                >
+                    {/*쿠폰 정책 추가되면 추가  onClick={() => setLiked(!liked)} */}
                 </button>
             </div>
 
@@ -135,8 +142,12 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
                 <summary className="flex cursor-pointer list-none items-center justify-between">
                     <span className="font-bold">최대 혜택가</span>
                     <span className="flex items-center gap-2">
-                        <span className="font-bold text-red-600">{rateOf(MAX_BENEFIT_PRICE)}%</span>
-                        <span className="font-bold">{won(MAX_BENEFIT_PRICE)}</span>
+                        <span className="font-bold text-red-600">
+                            {rateOf(MAX_BENEFIT_PRICE)}%
+                        </span>
+                        <span className="font-bold">
+                            {won(MAX_BENEFIT_PRICE)}
+                        </span>
                         <ToggleIcon />
                     </span>
                 </summary>
@@ -153,7 +164,10 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
                 <BenefitRow label="결제수단 할인" summary="결제수단별 즉시할인">
                     카드사별 무이자 개월 수와 금액이 들어갈 자리
                 </BenefitRow>
-                <BenefitRow label="배송 정보" summary="무료 배송 평일 14시 이전">
+                <BenefitRow
+                    label="배송 정보"
+                    summary="무료 배송 평일 14시 이전"
+                >
                     배송비 정책과 출고기준 시각이 들어갈 자리
                 </BenefitRow>
             </div>
@@ -162,7 +176,10 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
             <div className="mt-6">
                 <div className="flex items-center justify-between">
                     <p className="text-sm font-medium">사이즈</p>
-                    <button type="button" className="text-xs text-neutral-500 underline">
+                    <button
+                        type="button"
+                        className="text-xs text-neutral-500 underline"
+                    >
                         SIZE GUIDE
                     </button>
                 </div>
@@ -177,7 +194,9 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
                                     'h-10 w-full border text-sm transition',
                                     s.soldOut &&
                                         'cursor-not-allowed border-neutral-100 text-neutral-300 line-through',
-                                    !s.soldOut && size === s.label && 'border-neutral-900 font-bold',
+                                    !s.soldOut &&
+                                        size === s.label &&
+                                        'border-neutral-900 font-bold',
                                     !s.soldOut &&
                                         size !== s.label &&
                                         'border-neutral-200 hover:border-neutral-400',
@@ -202,12 +221,16 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
                                 type="button"
                                 aria-label="수량 줄이기"
                                 disabled={quantity === 1}
-                                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                                onClick={() =>
+                                    setQuantity((q) => Math.max(1, q - 1))
+                                }
                                 className="grid h-8 w-8 place-items-center disabled:text-neutral-300"
                             >
                                 <FiMinus size={12} />
                             </button>
-                            <span className="w-8 text-center text-sm">{quantity}</span>
+                            <span className="w-8 text-center text-sm">
+                                {quantity}
+                            </span>
                             <button
                                 type="button"
                                 aria-label="수량 늘리기"
@@ -224,7 +247,9 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
             {/* 총 금액 */}
             <div className="mt-5 flex items-baseline justify-between border-t border-neutral-200 pt-4">
                 <span className="text-sm text-neutral-500">총 상품 금액</span>
-                <span className="text-xl font-bold">{size === null ? '-' : won(total)}</span>
+                <span className="text-xl font-bold">
+                    {size === null ? '-' : won(total)}
+                </span>
             </div>
 
             <div className="mt-4 hidden gap-2 md:flex">

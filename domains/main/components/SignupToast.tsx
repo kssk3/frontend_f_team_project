@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
-import { cn } from '@/shared/utils/cn';
+import { cn } from '@/shared/lib/cn';
 
 // 로그인 전 메인에서 보여주는 회원가입 유도 토스트
 // 토스 '자산관리 리포트' 플로팅 카드 패턴 참고 (toss.tech/article/asset_management)
