@@ -3,7 +3,7 @@
 import { z } from 'zod';
 
 import type { VendorFormState } from '../types/types';
-import { vendorInquirySchema } from '../validation';
+import { vendorInquirySchema } from '../utils/vendorValidation';
 
 export async function submitVendorInquiry(
     _previousState: VendorFormState,

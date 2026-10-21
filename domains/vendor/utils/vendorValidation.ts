@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { mockCategories } from './data/mockCategories';
+import { mockCategories } from '../data/mockCategories';
 
 export const vendorInquirySchema = z
     .object({

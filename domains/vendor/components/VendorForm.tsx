@@ -5,7 +5,7 @@ import { ChevronDown } from 'lucide-react';
 
 import { cn } from '@/shared/utils/cn';
 
-import { submitVendorInquiry } from '../actions/actions';
+import { submitVendorInquiry } from '../actions/vendorInquiry.actions';
 import { mockInquiryTypes } from '../data/mockInquiryTypes';
 import { mockCategories } from '../data/mockCategories';
 import type { VendorFormState } from '../types/types';
