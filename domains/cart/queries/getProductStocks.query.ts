@@ -1,3 +1,4 @@
+'use server'
 // 상품 옵션 재고 조회
 
 import { createServerClient } from '@/shared/lib/supabase';
