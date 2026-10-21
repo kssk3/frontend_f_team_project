@@ -6,3 +6,4 @@ build
 public
 uploads
 package-lock.json
+package.json

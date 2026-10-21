@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import gnbLogo from './images/gnb_logo.png';
+import { Suspense } from 'react';
 import GnbMenu from './gnb/GnbMenu';
+import AuthMenu from './AuthMenu';
 import {
     Search,
     User,
@@ -61,14 +63,26 @@ export default function Header() {
             <nav className="mt-9 flex flex-1 items-start justify-between self-start">
                 <GnbMenu />
                 <ul className="flex items-start gap-[30px]">
-                    {utilMenus.map(({ href, label, Icon }) => (
-                        <UtilItem
-                            key={href}
-                            href={href}
-                            label={label}
-                            icon={Icon}
-                        />
-                    ))}
+                    {utilMenus.map(({ href, label, Icon }) =>
+                        // 로그인 칸만 로그인 상태에 따라 로그인 / 로그아웃으로 바뀐다
+                        href === '/login' ? (
+                            <Suspense
+                                key={href}
+                                fallback={<UtilItem href={href} label={label} icon={Icon} />}
+                            >
+                                <AuthMenu
+                                    loginItem={<UtilItem href={href} label={label} icon={Icon} />}
+                                />
+                            </Suspense>
+                        ) : (
+                            <UtilItem
+                                key={href}
+                                href={href}
+                                label={label}
+                                icon={Icon}
+                            />
+                        ),
+                    )}
                 </ul>
             </nav>
         </header>

@@ -13,13 +13,14 @@ import Script from 'next/script';
 import { SiNaver } from 'react-icons/si';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 import { login } from '@/domains/auth/actions';
+import {
+    KAKAO_LOGIN_URL,
+    NAVER_LOGIN_URL,
+} from '@/domains/auth/lib/socialLogin';
 import LoginLinks from './LoginLinks';
 import styles from './login.module.css';
 
 const BRAND = 'MYSHOP';
-// TODO: 백엔드 소셜 로그인 주소로 교체
-const NAVER_LOGIN_URL = 'https://nid.naver.com/nidlogin.login';
-const KAKAO_LOGIN_URL = 'https://accounts.kakao.com/login/?continue=https%3A%2F%2Faccounts.kakao.com%2Fweblogin%2Faccount#login';
 const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '';
 const SAVED_ID_KEY = 'savedLoginId';
 
