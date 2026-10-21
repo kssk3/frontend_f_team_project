@@ -1,21 +1,24 @@
 import { z } from 'zod';
-import { mockCategories } from './data/mockCategories';
+import { mockCategories } from '../data/mockCategories';
 
 export const vendorInquirySchema = z
     .object({
         companyName: z
             .string({ error: '회사명을 입력해주세요.' })
             .trim()
+            .min(1, { error: '회사명을 입력해주세요.' })
             .min(2, { error: '회사명은 2자 이상 입력해주세요.' })
             .max(50, { error: '회사명은 50자 이하로 입력해주세요.' }),
         brandName: z
-            .string({ error: '브랜드명을 입력해주세요' })
+            .string({ error: '브랜드명을 입력해주세요.' })
             .trim()
-            .min(2, { error: '브랜드명은 2자 이상 입력해주세요' })
+            .min(1, { error: '브랜드명을 입력해주세요.' })
+            .min(2, { error: '브랜드명은 2자 이상 입력해주세요.' })
             .max(50, { error: '브랜드명은 50자 이하로 입력해주세요.' }),
         contactName: z
             .string({ error: '담당자명을 입력해주세요.' })
             .trim()
+            .min(1, { error: '담당자명을 입력해주세요.' })
             .min(2, { error: '담당자명은 2자 이상 입력해주세요.' })
             .max(20, { error: '담당자명은 20자 이하로 입력해주세요.' }),
         phoneNumber: z

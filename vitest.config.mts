@@ -8,8 +8,8 @@ export default defineConfig({
         },
     },
     test: {
-        // 컴포넌트(UI) 테스트만 수집 — node:test 기반 *.test.ts 는 제외
-        include: ['**/*.test.tsx'],
+        // 단위(*.test.ts)·컴포넌트(*.test.tsx) 테스트를 모두 수집
+        include: ['**/*.test.{ts,tsx}'],
         exclude: ['node_modules/**', '.next/**'],
         environment: 'jsdom',
     },
