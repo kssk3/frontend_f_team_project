@@ -92,3 +92,24 @@ test('수정 후 재제출이 이전 오류를 남기지 않는다', async () =>
     assert.equal(valid.success, true);
     assert.equal(valid.errors, undefined);
 });
+
+test('검증 실패 시 JS 로드 전 제출에서도 입력값을 되살릴 수 있게 제출한 문자열을 data로 돌려준다', async () => {
+    const values = {
+        ...validInput,
+        companyName: '  테스트 회사  ',
+        email: 'invalid',
+    };
+    const result = await submit(toFormData(values));
+
+    assert.equal(result.success, false);
+    assert.deepEqual(result.data, values);
+});
+
+test('문자열이 아닌 값은 되살릴 입력값에서 빈 문자열로 바꾼다', async () => {
+    const formData = toFormData();
+    formData.set('email', new File(['invalid'], 'email.txt'));
+    const result = await submit(formData);
+
+    assert.equal(result.success, false);
+    assert.equal((result.data as Record<string, string>).email, '');
+});

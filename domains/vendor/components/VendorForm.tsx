@@ -9,6 +9,7 @@ import { cn } from '@/shared/utils/cn';
 import { submitVendorInquiry } from '../actions/vendorInquiry.actions';
 import { mockInquiryTypes } from '../data/mockInquiryTypes';
 import { mockCategories } from '../data/mockCategories';
+import type { VendorInquiryValues } from '../types/types';
 import { vendorFields } from '../types/vendorFields';
 import SubmitButton from './SubmitButton';
 
@@ -27,6 +28,9 @@ export default function VendorInquiryForm() {
         primaryCategory: '',
         secondaryCategory: '',
     });
+
+    // 검증 실패 시 액션이 돌려준 제출값 (JS 로드 전 제출에서 폼을 다시 채울 때 사용)
+    const submittedValues = formState.data as VendorInquiryValues | undefined;
 
     const secondaryOptions =
         mockCategories.find(
@@ -118,6 +122,9 @@ export default function VendorInquiryForm() {
                                         {...fieldProps}
                                         type={field.type}
                                         placeholder={placeholder}
+                                        defaultValue={
+                                            submittedValues?.[field.name] ?? ''
+                                        }
                                         className={cn(
                                             controlClass,
                                             'h-12 px-[15px]',
@@ -176,6 +183,9 @@ export default function VendorInquiryForm() {
                                         rows={field.rows}
                                         placeholder={placeholder}
                                         spellCheck={false}
+                                        defaultValue={
+                                            submittedValues?.[field.name] ?? ''
+                                        }
                                         className={cn(
                                             controlClass,
                                             'block h-[102px] resize-none px-[15px] py-[15px]',
