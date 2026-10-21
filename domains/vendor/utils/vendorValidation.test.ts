@@ -75,3 +75,24 @@ test('대표 카테고리에 속하지 않는 2차 카테고리를 거부한다'
         true,
     );
 });
+
+for (const [name, message] of [
+    ['companyName', '회사명을 입력해주세요.'],
+    ['brandName', '브랜드명을 입력해주세요.'],
+    ['contactName', '담당자명을 입력해주세요.'],
+] as const) {
+    test(`${name}이 빈칸이면 길이 오류가 아니라 "${message}"를 보여준다`, () => {
+        const result = vendorInquirySchema.safeParse({
+            ...validInput,
+            [name]: '   ',
+        });
+
+        assert.equal(result.success, false);
+        if (!result.success) {
+            const issue = result.error.issues.find(
+                (issue) => issue.path[0] === name,
+            );
+            assert.equal(issue?.message, message);
+        }
+    });
+}
