@@ -96,3 +96,20 @@ for (const [name, message] of [
         }
     });
 }
+
+test('이름 칸이 비어 있어도 2차 카테고리 불일치 오류를 함께 알려준다', () => {
+    const result = vendorInquirySchema.safeParse({
+        ...validInput,
+        companyName: '',
+        secondaryCategory: 'kitchen',
+    });
+
+    assert.equal(result.success, false);
+    if (!result.success) {
+        assert.ok(
+            result.error.issues.some(
+                (issue) => issue.path[0] === 'secondaryCategory',
+            ),
+        );
+    }
+});
