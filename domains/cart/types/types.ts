@@ -19,7 +19,6 @@ export interface CartItem {
 
 // 담기·수량 변경 때 받는 값
 export interface CartInput {
-    productID: string;  // 담을 상품의 id
     optionID: string;
     quantity: number;
 }
