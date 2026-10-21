@@ -1,17 +1,18 @@
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
+import {
+    INITIAL_ACTION_STATE,
+    type ActionState,
+} from '@/shared/types/action.types';
+
 import { validVendorInquiry as validInput } from '../testing/validVendorInquiry';
-import type { VendorFormState } from '../types/types';
 import { submitVendorInquiry } from './vendorInquiry.actions';
 
-const initialState: VendorFormState = {
-    status: 'idle',
-    message: '',
-    fieldErrors: {},
-};
-
-async function submit(formData: FormData, previous = initialState) {
+async function submit(
+    formData: FormData,
+    previous: ActionState = INITIAL_ACTION_STATE,
+) {
     return submitVendorInquiry(previous, formData);
 }
 
@@ -25,9 +26,8 @@ function toFormData(values = validInput) {
 
 test('빈 제출에는 필수 필드별 오류를 반환한다', async () => {
     const result = await submit(new FormData());
-    assert.equal(result.status, 'invalid');
-    assert.ok(result.message.length > 0);
-    const errors: Partial<Record<string, string[]>> = result.fieldErrors;
+    assert.equal(result.success, false);
+    assert.ok(result.message);
     for (const name of [
         'companyName',
         'brandName',
@@ -40,16 +40,23 @@ test('빈 제출에는 필수 필드별 오류를 반환한다', async () => {
         'email',
         'website',
     ] as const) {
-        assert.ok(errors[name]?.length, `${name} 오류가 필요합니다.`);
+        assert.ok(result.errors?.[name], `${name} 오류가 필요합니다.`);
     }
+});
+
+test('필드 오류는 팀 공통 형태대로 필드마다 메시지 1개(문자열)다', async () => {
+    const result = await submit(
+        toFormData({ ...validInput, email: 'invalid' }),
+    );
+    assert.equal(typeof result.errors?.email, 'string');
 });
 
 test('정상 제출은 저장 완료로 오인하지 않는 검증 결과를 반환한다', async () => {
     const result = await submit(toFormData());
-    assert.equal(result.status, 'validated');
-    assert.deepEqual(result.fieldErrors, {});
-    assert.match(result.message, /검증.*완료/);
-    assert.match(result.message, /저장되지 않았/);
+    assert.equal(result.success, true);
+    assert.equal(result.errors, undefined);
+    assert.match(result.message ?? '', /검증.*완료/);
+    assert.match(result.message ?? '', /저장되지 않았/);
 });
 
 test('잘못된 이메일·전화번호·카테고리에 해당 필드 오류를 반환한다', async () => {
@@ -62,9 +69,9 @@ test('잘못된 이메일·전화번호·카테고리에 해당 필드 오류를
         }),
     );
 
-    assert.equal(result.status, 'invalid');
+    assert.equal(result.success, false);
     for (const name of ['email', 'phoneNumber', 'secondaryCategory'] as const) {
-        assert.ok(result.fieldErrors[name]?.length);
+        assert.ok(result.errors?.[name]);
     }
 });
 
@@ -72,28 +79,16 @@ test('문자열 필드로 전달된 파일을 문자열로 강제 변환하지 �
     const formData = toFormData();
     formData.set('email', new File(['invalid'], 'email.txt'));
     const result = await submit(formData);
-    assert.equal(result.status, 'invalid');
-    assert.ok(result.fieldErrors.email?.length);
-});
-
-test('검증 실패 후 수정할 수 있도록 제출한 문자열 값을 보존한다', async () => {
-    const values = {
-        ...validInput,
-        companyName: '  테스트 회사  ',
-        email: 'invalid',
-    };
-    const result = await submit(toFormData(values));
-    assert.equal(result.status, 'invalid');
-    assert.ok('values' in result);
-    assert.deepEqual(result.values, values);
+    assert.equal(result.success, false);
+    assert.ok(result.errors?.email);
 });
 
 test('수정 후 재제출이 이전 오류를 남기지 않는다', async () => {
     const invalid = await submit(
         toFormData({ ...validInput, email: 'invalid' }),
     );
-    assert.equal(invalid.status, 'invalid');
+    assert.equal(invalid.success, false);
     const valid = await submit(toFormData(), invalid);
-    assert.equal(valid.status, 'validated');
-    assert.deepEqual(valid.fieldErrors, {});
+    assert.equal(valid.success, true);
+    assert.equal(valid.errors, undefined);
 });

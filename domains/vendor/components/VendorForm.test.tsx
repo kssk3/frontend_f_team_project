@@ -57,3 +57,21 @@ test('검증이 완료된 뒤에도 선택한 카테고리가 화면에 유지�
     expect(select('대표 카테고리').value).toBe('men');
     expect(select('2차 카테고리').value).toBe('bags');
 });
+
+test('검증 실패 후에도 입력한 값이 화면에 그대로 남는다', async () => {
+    const user = await fillFormWithEmail('invalid-email');
+    await user.type(screen.getByLabelText('문의 내용'), '입점 문의입니다.');
+
+    await user.click(screen.getByRole('button', { name: '등록' }));
+    await screen.findByText('올바른 이메일을 입력해주세요.');
+
+    expect(screen.getByLabelText<HTMLInputElement>('회사명').value).toBe(
+        '테스트 회사',
+    );
+    expect(screen.getByLabelText<HTMLInputElement>('담당자 이메일').value).toBe(
+        'invalid-email',
+    );
+    expect(screen.getByLabelText<HTMLTextAreaElement>('문의 내용').value).toBe(
+        '입점 문의입니다.',
+    );
+});

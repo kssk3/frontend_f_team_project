@@ -3,20 +3,14 @@ import { startTransition, useActionState, useState } from 'react';
 import type { FormEvent } from 'react';
 import { ChevronDown } from 'lucide-react';
 
+import { INITIAL_ACTION_STATE } from '@/shared/types/action.types';
 import { cn } from '@/shared/utils/cn';
 
 import { submitVendorInquiry } from '../actions/vendorInquiry.actions';
 import { mockInquiryTypes } from '../data/mockInquiryTypes';
 import { mockCategories } from '../data/mockCategories';
-import type { VendorFormState } from '../types/types';
 import { vendorFields } from '../types/vendorFields';
 import SubmitButton from './SubmitButton';
-
-const initialState: VendorFormState = {
-    status: 'idle',
-    message: '',
-    fieldErrors: {},
-};
 
 // EQL 입점 문의 폼 기준 스타일 (라벨 160px · 입력 48px · #ccc 테두리)
 const controlClass =
@@ -26,7 +20,7 @@ const buttonClass = 'h-[52px] w-[148px] text-[16px] font-medium';
 export default function VendorInquiryForm() {
     const [formState, formAction, isPending] = useActionState(
         submitVendorInquiry,
-        initialState,
+        INITIAL_ACTION_STATE,
     );
     const [selectedValues, setSelectedValues] = useState({
         inquiryType: '',
@@ -85,7 +79,7 @@ export default function VendorInquiryForm() {
                 <legend className="sr-only">문의 정보</legend>
 
                 {vendorFields.map((field) => {
-                    const errors = formState.fieldErrors[field.name] ?? [];
+                    const error = formState.errors?.[field.name];
                     const errorId = `${field.name}-error`;
                     const isRequired = !('optional' in field);
                     const placeholder =
@@ -93,9 +87,8 @@ export default function VendorInquiryForm() {
                     const fieldProps = {
                         id: field.name,
                         name: field.name,
-                        'aria-invalid': errors.length > 0,
-                        'aria-describedby':
-                            errors.length > 0 ? errorId : undefined,
+                        'aria-invalid': Boolean(error),
+                        'aria-describedby': error ? errorId : undefined,
                     };
 
                     return (
@@ -125,9 +118,6 @@ export default function VendorInquiryForm() {
                                         {...fieldProps}
                                         type={field.type}
                                         placeholder={placeholder}
-                                        defaultValue={
-                                            formState.values?.[field.name] ?? ''
-                                        }
                                         className={cn(
                                             controlClass,
                                             'h-12 px-[15px]',
@@ -186,9 +176,6 @@ export default function VendorInquiryForm() {
                                         rows={field.rows}
                                         placeholder={placeholder}
                                         spellCheck={false}
-                                        defaultValue={
-                                            formState.values?.[field.name] ?? ''
-                                        }
                                         className={cn(
                                             controlClass,
                                             'block h-[102px] resize-none px-[15px] py-[15px]',
@@ -196,15 +183,13 @@ export default function VendorInquiryForm() {
                                     />
                                 )}
 
-                                {errors.length > 0 && (
-                                    <div
+                                {error && (
+                                    <p
                                         id={errorId}
                                         className="text-point mt-[10px] text-[14px]"
                                     >
-                                        {errors.map((error) => (
-                                            <p key={error}>{error}</p>
-                                        ))}
-                                    </div>
+                                        {error}
+                                    </p>
                                 )}
                             </div>
                         </div>
@@ -221,7 +206,7 @@ export default function VendorInquiryForm() {
                     aria-live="polite"
                     className={cn(
                         'mt-[30px] text-center text-[14px] font-medium empty:mt-0',
-                        formState.status === 'invalid' && 'text-point',
+                        !formState.success && 'text-point',
                     )}
                 >
                     {formState.message}

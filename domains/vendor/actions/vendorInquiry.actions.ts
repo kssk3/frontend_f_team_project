@@ -2,14 +2,15 @@
 
 import { z } from 'zod';
 
-import type { VendorFormState } from '../types/types';
+import type { ActionState } from '@/shared/types/action.types';
+
 import { vendorInquirySchema } from '../utils/vendorValidation';
 
 export async function submitVendorInquiry(
-    _previousState: VendorFormState,
+    _previousState: ActionState,
     formData: FormData,
-): Promise<VendorFormState> {
-    const rawData = {
+): Promise<ActionState> {
+    const result = vendorInquirySchema.safeParse({
         companyName: formData.get('companyName'),
         brandName: formData.get('brandName'),
         contactName: formData.get('contactName'),
@@ -22,28 +23,25 @@ export async function submitVendorInquiry(
         website: formData.get('website'),
         otherPlatforms: formData.get('otherPlatforms') ?? '',
         content: formData.get('content') ?? '',
-    };
-    const result = vendorInquirySchema.safeParse(rawData);
-    const values = Object.fromEntries(
-        Object.entries(rawData).map(([name, value]) => [
-            name,
-            typeof value === 'string' ? value : '',
-        ]),
-    );
+    });
 
     if (!result.success) {
+        // 팀 공통 형태(ActionState.errors)에 맞춰 필드마다 첫 번째 메시지만 전달
+        const { fieldErrors } = z.flattenError(result.error);
+        const errors: Record<string, string> = {};
+        for (const [name, messages] of Object.entries(fieldErrors)) {
+            if (messages?.[0]) errors[name] = messages[0];
+        }
+
         return {
-            status: 'invalid',
+            success: false,
             message: '입력 내용을 확인해 주세요.',
-            fieldErrors: z.flattenError(result.error).fieldErrors,
-            values,
+            errors,
         };
     }
 
     return {
-        status: 'validated',
+        success: true,
         message: '입력값 검증이 완료되었습니다. 아직 저장되지 않았습니다.',
-        fieldErrors: {},
-        values,
     };
 }
