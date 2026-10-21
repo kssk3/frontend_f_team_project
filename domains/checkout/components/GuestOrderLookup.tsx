@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { ActionState } from '@/shared/types/action.types';
 import useFormState from '@/shared/hooks/useFormState';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 import {
     findGuestOrderAction,
     GuestOrder,

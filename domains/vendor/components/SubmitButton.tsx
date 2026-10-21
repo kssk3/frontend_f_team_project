@@ -1,6 +1,6 @@
 'use client';
 import { useFormStatus } from 'react-dom';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 import { Button } from '@/shared/components/ui/button';
 
 export default function SubmitButton({ className }: { className?: string }) {

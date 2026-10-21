@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 
 const STEPS = ['본인인증', '회원가입', '가입 완료'];
 

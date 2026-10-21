@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { Plus } from 'lucide-react';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 
 type FooterLink = {
     href: string;

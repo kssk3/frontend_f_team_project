@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 
 // 이미지 주소 배열을 받는다. 지금 mock 은 상품당 1장이라 page 가 [product.image] 로 감싸서 넘긴다
 interface DetailGalleryProps {

@@ -6,7 +6,7 @@
 
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 import { useRouter } from 'next/navigation';
 import type { Product } from '@/domains/product/types/product.types';
 

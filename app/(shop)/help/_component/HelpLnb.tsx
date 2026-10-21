@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Check, Mail, MessageCircle } from 'lucide-react';
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 
 const helpMenus = [
     { href: '/help/faq', label: 'FAQ' },

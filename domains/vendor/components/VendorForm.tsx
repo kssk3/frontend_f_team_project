@@ -3,7 +3,7 @@ import { startTransition, useActionState, useState } from 'react';
 import type { FormEvent } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 
 import { submitVendorInquiry } from '../actions/actions';
 import { mockInquiryTypes } from '../data/mockInquiryTypes';

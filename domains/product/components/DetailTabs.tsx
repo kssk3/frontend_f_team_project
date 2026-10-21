@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/shared/lib/cn';
+import { cn } from '@/shared/utils/cn';
 // useRef = 필요할 때 요소에 직접 위치 참조시킴
 import { useRef, useState } from 'react';
 
