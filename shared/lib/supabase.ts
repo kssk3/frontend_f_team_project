@@ -4,18 +4,40 @@ import { SupabaseClient } from "@supabase/supabase-js";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
 
-if(!supabaseUrl || !supabasePublishableKey) {
-    console.warn('NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_PUBLISHABLE_KEY가 설정되지 않았습니다.');
+// 연결 객체를 만들 때만 확인한다 (파일을 불러올 때마다 경고가 찍히지 않게)
+function warnIfEnvMissing() {
+    if(!supabaseUrl || !supabasePublishableKey) {
+        console.warn('NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY가 설정되지 않았습니다.');
+    }
 }
-//CSR supabase 연결 객체
 
-export const supabase = createBrowserClient(
-    supabaseUrl,
-    supabasePublishableKey
-);
+//CSR supabase 연결 객체 — 브라우저에서 처음 부를 때 한 번만 만든다
+let browserClient: SupabaseClient | undefined;
+
+export function getBrowserClient(): SupabaseClient {
+    if (!browserClient) {
+        warnIfEnvMissing();
+        browserClient = createBrowserClient(supabaseUrl, supabasePublishableKey);
+    }
+    return browserClient;
+}
+
+/**
+ * @deprecated getBrowserClient() 를 사용하세요.
+ * 기존 코드가 바로 깨지지 않도록 남겨 둔 것으로, 처음 사용할 때 getBrowserClient() 의 객체를 만든다.
+ * 모든 사용처가 getBrowserClient() 로 바뀌면 삭제한다.
+ */
+export const supabase = new Proxy({} as SupabaseClient, {
+    get(_target, property) {
+        const client = getBrowserClient();
+        const value = Reflect.get(client, property, client);
+        return typeof value === 'function' ? value.bind(client) : value;
+    },
+});
 
 //SSR supabase 연결 객체
 export function createServerClient(): SupabaseClient {
+    warnIfEnvMissing();
     return createSSRServerClient(supabaseUrl,supabasePublishableKey, {
         cookies: {
             async getAll() {
