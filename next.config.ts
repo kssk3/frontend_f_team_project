@@ -16,6 +16,13 @@ const nextConfig: NextConfig = {
         pathname: "/seed/**",
         search: "",
       },
+      {
+        // 상품 사진(DB product_images.image_url) — Unsplash 무료 사진만 (유료 plus.unsplash.com 제외)
+        // 크기·자르기 쿼리(?w=900&h=1200&fit=crop&q=80)가 붙으므로 search 는 제한하지 않는다
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/photo-*",
+      },
     ],
   },
   turbopack: {
