@@ -60,7 +60,13 @@ export const vendorInquirySchema = z
             .string({ error: '브랜드 웹사이트를 입력해 주세요.' })
             .trim()
             .min(1, { error: '브랜드 웹사이트를 입력해 주세요.' })
-            .pipe(z.url({ error: '올바른 웹사이트 주소를 입력해 주세요.' })),
+            // z.url() 은 javascript:·data: 주소도 통과시키므로 http(s) 만 허용한다
+            .pipe(
+                z.url({
+                    protocol: /^https?$/,
+                    error: '올바른 웹사이트 주소를 입력해 주세요.',
+                }),
+            ),
         otherPlatforms: z
             .string({ error: '타사 입점현황을 다시 입력해 주세요.' })
             .trim(),

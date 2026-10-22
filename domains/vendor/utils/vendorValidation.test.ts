@@ -29,6 +29,10 @@ for (const [name, value] of [
     ['mobileNumber', '010-1234-5678'],
     ['website', ''],
     ['website', '올바르지 않은 주소'],
+    // 관리자 화면에서 링크로 열릴 수 있으므로 http(s) 주소만 받는다
+    ['website', 'javascript:alert(1)'],
+    ['website', 'data:text/html,hi'],
+    ['website', 'ftp://example.com'],
 ] as const) {
     test(`${name}의 잘못된 값 ${JSON.stringify(value)}를 거부한다`, () => {
         const result = vendorInquirySchema.safeParse({
