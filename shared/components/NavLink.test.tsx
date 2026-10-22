@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ComponentProps } from 'react';
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
@@ -67,6 +67,54 @@ test('아직 없는 페이지 링크는 이동을 막고 준비 중 안내를 �
 
     await user.click(screen.getByRole('button', { name: '확인' }));
     expect(toast()).toBeNull();
+});
+
+// PR #47 Codex P2: 새 탭·새 창으로 여는 클릭은 브라우저 기본 동작을 막지 않는다
+test.each([
+    ['Cmd + 클릭 (새 탭, macOS)', { metaKey: true }],
+    ['Ctrl + 클릭 (새 탭)', { ctrlKey: true }],
+    ['Shift + 클릭 (새 창)', { shiftKey: true }],
+    ['Alt + 클릭', { altKey: true }],
+    ['왼쪽이 아닌 버튼 클릭', { button: 1 }],
+])('%s 은 막지 않고 토스트도 띄우지 않는다', (_label, init) => {
+    render(
+        <ComingSoonProvider>
+            <NavLink href="/women">WOMEN</NavLink>
+        </ComingSoonProvider>,
+    );
+
+    fireEvent.click(screen.getByRole('link', { name: 'WOMEN' }), init);
+
+    expect(lastClickPrevented).toBe(false);
+    expect(toast()).toBeNull();
+});
+
+test('넘겨준 onClick 이 이동을 막았으면 토스트를 띄우지 않는다', async () => {
+    const user = userEvent.setup();
+    render(
+        <ComingSoonProvider>
+            <NavLink href="/women" onClick={(event) => event.preventDefault()}>
+                WOMEN
+            </NavLink>
+        </ComingSoonProvider>,
+    );
+
+    await user.click(screen.getByRole('link', { name: 'WOMEN' }));
+    expect(toast()).toBeNull();
+});
+
+test('className · aria-label 등 나머지 속성을 그대로 링크에 전달한다', () => {
+    render(
+        <ComingSoonProvider>
+            <NavLink href="/search" aria-label="검색" className="size-7">
+                <span>아이콘</span>
+            </NavLink>
+        </ComingSoonProvider>,
+    );
+
+    const link = screen.getByRole('link', { name: '검색' });
+    expect(link.className).toBe('size-7');
+    expect(link.textContent).toBe('아이콘');
 });
 
 test('넘겨준 onClick 은 그대로 호출한다', async () => {

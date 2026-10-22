@@ -28,7 +28,20 @@ export default function NavLink({
             prefetch={ready ? prefetch : false}
             onClick={(event) => {
                 onClick?.(event);
-                if (ready || !openComingSoon) return;
+                // 새 탭·새 창(Cmd/Ctrl/Shift/Alt, 왼쪽 버튼이 아닌 클릭)은 브라우저 기본 동작에 맡긴다
+                const isPlainClick =
+                    event.button === 0 &&
+                    !event.metaKey &&
+                    !event.ctrlKey &&
+                    !event.shiftKey &&
+                    !event.altKey;
+                if (
+                    ready ||
+                    !openComingSoon ||
+                    !isPlainClick ||
+                    event.defaultPrevented
+                )
+                    return;
                 event.preventDefault();
                 openComingSoon();
             }}
