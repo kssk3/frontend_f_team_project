@@ -2,10 +2,7 @@ import { Suspense } from 'react';
 import MainBanner from '@/domains/main/components/MainBanner';
 import DiscoverSection from '@/domains/main/components/DiscoverSection';
 import DiscoverSkeleton from '@/domains/main/components/DiscoverSkeleton';
-import SignupToast from '@/domains/main/components/SignupToast';
-
-// TODO: 로그인 기능이 생기면 실제 로그인 상태로 교체
-const isLoggedIn = false;
+import AuthSignupToast from '@/domains/auth/components/AuthSignupToast';
 
 export default function MainPage(): React.JSX.Element {
     return (
@@ -19,7 +16,9 @@ export default function MainPage(): React.JSX.Element {
             <Suspense fallback={<DiscoverSkeleton />}>
                 <DiscoverSection />
             </Suspense>
-            <SignupToast isLoggedIn={isLoggedIn} />
+            <Suspense fallback={null}>
+                <AuthSignupToast />
+            </Suspense>
         </Suspense>
     );
 }

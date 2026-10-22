@@ -1,55 +1,102 @@
 'use server';
-import { createServerClient } from "@/shared/lib/supabase";
-import { ActionState } from "@/shared/types/action.types";
-import { validateSignInInput } from "../utils/authValidation";
-import { revalidatePath } from "next/cache";
+
+import { revalidatePath } from 'next/cache';
+import { createServerClient } from '@/shared/lib/supabase';
+import type { ActionState } from '@/shared/types/action.types';
+import { clearLoginCookies } from '../utils/clearLoginCookies';
+import { validateSignInInput } from '../utils/authValidation';
 
 export async function signInAction(
-    prevState: ActionState,
+    _prevState: ActionState,
     formData: FormData,
 ): Promise<ActionState> {
-
-    const email = (formData.get('email') as string) ?? '';
-    const password = (formData.get('password') as string) ?? '';
-
-    //입력값 유효성 검사
+    const rawEmail = formData.get('email');
+    const rawPassword = formData.get('password');
+    const email = typeof rawEmail === 'string' ? rawEmail.trim() : '';
+    const password = typeof rawPassword === 'string' ? rawPassword : '';
     const errors = validateSignInInput({ email, password });
-    if (Object.keys(errors).length > 0) {
-        return{
-            success: false,
-            errors,
-        };
-    }
-    const supabase = createServerClient();
-    const { data: authData, error: signInError }= await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password.trim(),
-    });
+    if (Object.keys(errors).length > 0) return { success: false, errors };
 
-    if (signInError || !authData.user){
-        return{
-            success: false,
-            message:'이메일 또는 비밀번호가 일치하지 않습니다.'
-        }
-    };
-
-    const { data: profile } =await supabase
-        .from('users')
-        .select('*')
-        .eq('id', authData.user.id)
-        .maybeSingle();
-    if(!profile || profile.deleted_at) {
-        await supabase.auth.signOut(); //로그아웃
+    let supabase: ReturnType<typeof createServerClient>;
+    try {
+        supabase = createServerClient();
+    } catch {
         return {
             success: false,
-            message: profile?.deleted_at ? '탈퇴한 회원입니다.':'프로필이 존재하지 않습니다.'
-        }
+            message:
+                '로그인 서비스 설정을 확인할 수 없습니다. 관리자에게 문의해 주세요.',
+        };
     }
 
-    revalidatePath('/','layout'); //layout - 전체, page - 페이지
+    let signedIn = false;
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+        });
+        if (error || !data.user) {
+            if (error?.code === 'email_not_confirmed') {
+                return {
+                    success: false,
+                    message: '이메일 인증을 완료한 뒤 다시 로그인해 주세요.',
+                };
+            }
+            if (error && error.code !== 'invalid_credentials') {
+                return {
+                    success: false,
+                    message:
+                        '인증 서비스를 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+                };
+            }
+            return {
+                success: false,
+                message: '이메일 또는 비밀번호가 일치하지 않습니다.',
+            };
+        }
+        signedIn = true;
+        const { data: profile, error: profileError } = await supabase
+            .from('users')
+            .select('id, deleted_at')
+            .eq('id', data.user.id)
+            .maybeSingle();
+        if (
+            profileError ||
+            !profile ||
+            profile.id !== data.user.id ||
+            profile.deleted_at
+        ) {
+            try {
+                await supabase.auth.signOut({ scope: 'local' });
+            } finally {
+                await clearLoginCookies();
+            }
+            signedIn = false;
+            return {
+                success: false,
+                message:
+                    profileError || (profile && profile.id !== data.user.id)
+                        ? '회원 정보를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요.'
+                        : profile?.deleted_at
+                          ? '탈퇴한 회원입니다. 고객센터에 문의해 주세요.'
+                          : '프로필이 존재하지 않습니다. 고객센터에 회원 정보 복구를 문의해 주세요.',
+            };
+        }
+    } catch {
+        if (signedIn) {
+            try {
+                await supabase.auth.signOut({ scope: 'local' });
+            } catch {
+                /* Still clear the browser session below. */
+            }
+            await clearLoginCookies();
+        }
+        return {
+            success: false,
+            message:
+                '인증 서비스를 이용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+        };
+    }
 
-    return {
-        success: true,
-        message: '로그인 되었습니다.',
-    };
+    revalidatePath('/', 'layout');
+    return { success: true, message: '로그인 되었습니다.' };
 }
