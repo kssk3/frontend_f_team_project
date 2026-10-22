@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState, useTransition } from 'react';
+import { SubmitEvent, useState, useTransition } from 'react';
 import Link from 'next/link';
 import useFormState from '@/shared/hooks/useFormState';
 import { VerifiedIdentity } from '../../types/auth.types';
@@ -26,7 +26,7 @@ export default function FindPasswordView() {
     const [message, setMessage] = useState('');
     const [isPending, startTransition] = useTransition();
 
-    const onNext = (e: FormEvent<HTMLFormElement>) => {
+    const onNext = (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!EMAIL_REGEX.test(form.email.trim())) {
             return setError('올바른 이메일 형식이 아닙니다.');
