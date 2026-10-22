@@ -2,7 +2,10 @@ import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 import { validVendorInquiry as validInput } from '../testing/validVendorInquiry';
-import { vendorInquirySchema } from './vendorValidation';
+import {
+    VENDOR_TEXT_MAX_LENGTH,
+    vendorInquirySchema,
+} from './vendorValidation';
 
 test('12개 필드를 정규화하고 전화번호의 앞자리 0을 보존한다', () => {
     const result = vendorInquirySchema.parse({
@@ -77,9 +80,9 @@ test('대표 카테고리에 속하지 않는 2차 카테고리를 거부한다'
 });
 
 for (const [name, message] of [
-    ['companyName', '회사명을 입력해주세요.'],
-    ['brandName', '브랜드명을 입력해주세요.'],
-    ['contactName', '담당자명을 입력해주세요.'],
+    ['companyName', '회사명을 입력해 주세요.'],
+    ['brandName', '브랜드명을 입력해 주세요.'],
+    ['contactName', '담당자명을 입력해 주세요.'],
 ] as const) {
     test(`${name}이 빈칸이면 길이 오류가 아니라 "${message}"를 보여준다`, () => {
         const result = vendorInquirySchema.safeParse({
@@ -113,3 +116,45 @@ test('이름 칸이 비어 있어도 2차 카테고리 불일치 오류를 함�
         );
     }
 });
+
+test('모든 오류 문구는 EQL 표기처럼 "~해 주세요."로 띄어 쓰고 마침표로 끝난다', () => {
+    const cases = [
+        {},
+        Object.fromEntries(Object.keys(validInput).map((key) => [key, ''])),
+        {
+            ...validInput,
+            companyName: 'a',
+            brandName: 'b'.repeat(51),
+            phoneNumber: '02-12',
+            mobileNumber: '010-1',
+            email: 'x',
+            website: 'x',
+            secondaryCategory: 'kitchen',
+        },
+    ];
+    const messages = cases.flatMap((input) => {
+        const result = vendorInquirySchema.safeParse(input);
+        return result.success ? [] : result.error.issues.map((i) => i.message);
+    });
+
+    assert.ok(messages.length > 10);
+    for (const message of messages) {
+        assert.doesNotMatch(message, /해주세요/, message);
+        assert.match(message, /\.$/, message);
+    }
+});
+
+for (const [name, limit] of Object.entries(VENDOR_TEXT_MAX_LENGTH)) {
+    test(`${name} 은 ${limit}자까지 허용하고 넘으면 거부한다`, () => {
+        const ok = vendorInquirySchema.safeParse({
+            ...validInput,
+            [name]: '가'.repeat(limit),
+        });
+        const over = vendorInquirySchema.safeParse({
+            ...validInput,
+            [name]: '가'.repeat(limit + 1),
+        });
+        assert.equal(ok.success, true);
+        assert.equal(over.success, false);
+    });
+}

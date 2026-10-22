@@ -1,21 +1,26 @@
+import { VENDOR_TEXT_MAX_LENGTH } from '../utils/vendorValidation';
+
 export const vendorFields = [
     {
         kind: 'input',
         name: 'companyName',
         label: '회사명',
         type: 'text',
+        maxLength: VENDOR_TEXT_MAX_LENGTH.companyName,
     },
     {
         kind: 'input',
         name: 'brandName',
         label: '브랜드명',
         type: 'text',
+        maxLength: VENDOR_TEXT_MAX_LENGTH.brandName,
     },
     {
         kind: 'input',
         name: 'contactName',
         label: '담당자명',
         type: 'text',
+        maxLength: VENDOR_TEXT_MAX_LENGTH.contactName,
     },
     {
         kind: 'input',
