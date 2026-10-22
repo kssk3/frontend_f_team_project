@@ -3,16 +3,17 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, expect, test, vi } from 'vitest';
 
 import { submitVendorInquiry } from '../actions/vendorInquiry.actions';
-import type { ActionState } from '@/shared/types/action.types';
+import type { VendorInquiryState } from '../types/types';
 import VendorInquiryForm from './VendorForm';
 
 vi.mock('../actions/vendorInquiry.actions', () => ({
     submitVendorInquiry: vi.fn(),
 }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }));
 afterEach(cleanup);
 
 test('제출 중에는 등록 버튼이 비활성화되고 끝나면 다시 활성화된다', async () => {
-    let finish!: (state: ActionState) => void;
+    let finish!: (state: VendorInquiryState) => void;
 
     vi.mocked(submitVendorInquiry).mockImplementation(
         () => new Promise((resolve) => (finish = resolve)),
