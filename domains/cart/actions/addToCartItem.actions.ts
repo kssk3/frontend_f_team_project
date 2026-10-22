@@ -4,7 +4,6 @@
 import { createServerClient } from '@/shared/lib/supabase';
 
 // 데이터 타입
-import { type CartInput } from '../types/types';
 import { type ActionState } from '@/shared/types/action.types';
 
 // 검증 - 입력값 형식
@@ -46,7 +45,7 @@ export async function addToCartItem(
     } = await supabase.auth.getUser();
 
     if (!user) {
-        // 비회원 → 장바구니는 회원 전용 (상품 페이지에서 로그인 페이지로 보냄)
+        // 비회원 → DB에는 저장하지 않음 (AddToCartForm 이 이 문구를 보고 브라우저 장바구니에 담는다)
         return {
             success: false,
             message: '로그인 후 이용해 주세요.',
@@ -87,6 +86,7 @@ export async function addToCartItem(
             .eq('id', cartItem.id);
 
         if (error) {
+            console.error('[cart] 장바구니 수량 수정 실패', error.code, error.message);
             return { success: false, message: '장바구니 담기에 실패했습니다.' };
         }
     } else {
@@ -96,6 +96,8 @@ export async function addToCartItem(
             .insert({ user_id: user.id, option_id: optionId, quantity: quantity, is_checked: true });
 
         if (error) {
+            // 42501 이면 cart_items 권한 규칙이 없는 것 → db/migrations/20261022_cart_items_rls.sql 실행
+            console.error('[cart] 장바구니 추가 실패', error.code, error.message);
             return { success: false, message: '장바구니 담기에 실패했습니다.' };
         }
     }
