@@ -1,5 +1,6 @@
 // 장바구니(01 cart)와 주문(02 order) 페이지에서 사용예정
 
+import OptionChangeModal from "./OptionChangeModal";
 
 import { GoX } from "react-icons/go"; // X 아이콘
 
@@ -40,9 +41,10 @@ export default function CartProductItem(): React.JSX.Element {
                     <p className="text-subtle">
                         {'상품 옵션'} / {'상품 갯수'}개
                     </p>
-                    <button type="button" className="underline">
+                    <OptionChangeModal />
+                    {/* <button type="button" className="underline">
                         옵션 변경
-                    </button>
+                    </button> */}
                 </div>
 
             </div>

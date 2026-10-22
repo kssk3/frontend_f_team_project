@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Link from 'next/link';
+import NavLink from '@/shared/components/NavLink';
 import { ChevronRight } from 'lucide-react';
 import type {
     GnbBanner,
@@ -10,13 +10,13 @@ import type {
 
 const DepthOneLink = ({ link }: { link: GnbLink }) => {
     return (
-        <Link
+        <NavLink
             href={link.href}
             className="flex h-7 items-center gap-1 text-sm font-bold text-black"
         >
             {link.label}
             <ChevronRight className="size-3" strokeWidth={2.5} aria-hidden />
-        </Link>
+        </NavLink>
     );
 };
 
@@ -29,12 +29,12 @@ const Kolumn = ({ column }: { column: GnbColumn }) => {
             <ul className="mt-[14px]">
                 {column.items.map((item) => (
                     <li key={item.href}>
-                        <Link
+                        <NavLink
                             href={item.href}
                             className="block text-sm leading-7 font-medium text-[#999]"
                         >
                             {item.label}
-                        </Link>
+                        </NavLink>
                     </li>
                 ))}
             </ul>
@@ -45,7 +45,7 @@ const Kolumn = ({ column }: { column: GnbColumn }) => {
 const Banner = ({ banner }: { banner: GnbBanner }) => {
     return (
         <li className="h-[325px] w-[380px] shrink-0">
-            <Link href={banner.href} className="block">
+            <NavLink href={banner.href} className="block">
                 <div className="relative aspect-[380/251] overflow-hidden bg-[#f2f2f2]">
                     <Image
                         src={banner.image}
@@ -58,7 +58,7 @@ const Banner = ({ banner }: { banner: GnbBanner }) => {
                 <p className="mt-5 text-base leading-6 font-medium text-black">
                     {banner.title}
                 </p>
-            </Link>
+            </NavLink>
         </li>
     );
 };

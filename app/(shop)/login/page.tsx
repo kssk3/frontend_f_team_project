@@ -6,7 +6,7 @@ import {
     useRef,
     useState,
     useSyncExternalStore,
-    type FormEvent,
+    type SubmitEvent,
 } from 'react';
 import Link from 'next/link';
 import Script from 'next/script';
@@ -128,7 +128,7 @@ export default function LoginPage() {
             grecaptcha.execute(widgetId);
         });
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         setClientError('');
         let token: string;

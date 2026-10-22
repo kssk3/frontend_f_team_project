@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import NavLink from '@/shared/components/NavLink';
 import { usePathname } from 'next/navigation';
 import { Check, Mail, MessageCircle } from 'lucide-react';
 
@@ -49,7 +49,7 @@ export default function HelpLnb() {
                                         : 'border-secondary',
                                 )}
                             >
-                                <Link
+                                <NavLink
                                     href={menu.href}
                                     aria-current={isActive ? 'page' : undefined}
                                     className="flex h-[49px] items-center justify-between text-[16px] font-medium"
@@ -61,7 +61,7 @@ export default function HelpLnb() {
                                             className="size-[15px]"
                                         />
                                     )}
-                                </Link>
+                                </NavLink>
                             </li>
                         );
                     })}

@@ -1,8 +1,8 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { SubmitEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/shared/lib/supabase';
+import { getBrowserClient } from '@/shared/lib/supabase';
 import useFormState from '@/shared/hooks/useFormState';
 
 type Status = 'checking' | 'ready' | 'invalid' | 'done';
@@ -22,12 +22,14 @@ export default function ResetPasswordView() {
     // 브라우저 클라이언트가 URL의 ?code= 를 세션으로 교환해 준다.
     // getSession()은 그 교환이 끝날 때까지 기다린다.
     useEffect(() => {
-        supabase.auth.getSession().then(({ data }) => {
-            setStatus(data.session ? 'ready' : 'invalid');
-        });
+        getBrowserClient()
+            .auth.getSession()
+            .then(({ data }) => {
+                setStatus(data.session ? 'ready' : 'invalid');
+            });
     }, []);
 
-    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (form.password.length < 7) {
             return setError('비밀번호는 최소 7자 이상이어야 합니다.');
@@ -37,15 +39,17 @@ export default function ResetPasswordView() {
         }
         setError('');
         setIsPending(true);
-        const { error: updateError } = await supabase.auth.updateUser({
-            password: form.password,
-        });
+        const { error: updateError } = await getBrowserClient().auth.updateUser(
+            {
+                password: form.password,
+            },
+        );
         setIsPending(false);
         if (updateError) {
             return setError(`변경에 실패했습니다: ${updateError.message}`);
         }
         // 재설정용 세션은 끊고 새 비밀번호로 다시 로그인하게 한다
-        await supabase.auth.signOut();
+        await getBrowserClient().auth.signOut();
         setStatus('done');
     };
 

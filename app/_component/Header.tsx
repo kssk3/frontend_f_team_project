@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import NavLink from '@/shared/components/NavLink';
 import gnbLogo from './images/gnb_logo.png';
 import { Suspense } from 'react';
 import GnbMenu from './gnb/GnbMenu';
@@ -30,7 +31,7 @@ const utilMenus = [
 export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
     return (
         <li>
-            <Link
+            <NavLink
                 href={href}
                 aria-label={label}
                 className="relative block size-7"
@@ -41,7 +42,7 @@ export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
                         0
                     </span>
                 )}
-            </Link>
+            </NavLink>
         </li>
     );
 }

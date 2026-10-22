@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import NavLink from '@/shared/components/NavLink';
 import type { ReactNode } from 'react';
 import { Plus } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
@@ -76,13 +76,13 @@ function FooterLinkList({
             <li className="mb-5 font-bold text-black">{title}</li>
             {links.map(({ href, label, isStrong }) => (
                 <li key={href} className="mb-2.5">
-                    <Link href={href}>
+                    <NavLink href={href}>
                         {isStrong ? (
                             <strong className="underline">{label}</strong>
                         ) : (
                             label
                         )}
-                    </Link>
+                    </NavLink>
                 </li>
             ))}
         </ul>

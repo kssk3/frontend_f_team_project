@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import Link from 'next/link';
+import NavLink from '@/shared/components/NavLink';
 import { cn } from '@/shared/utils/cn';
 import { gnbMenus } from '@/app/_component/gnb/gnbMenus';
 import GnbPanel from '@/app/_component/gnb/GnbPanel';
@@ -32,7 +32,7 @@ const GnbItem = ({
 }: GnbItemProps) => {
     return (
         <li className={cn('group', hasBar && barClass)} onMouseEnter={onEnter}>
-            <Link
+            <NavLink
                 href={href}
                 onFocus={onEnter}
                 aria-expanded={hasPanel ? isActive : undefined}
@@ -43,7 +43,7 @@ const GnbItem = ({
                 )}
             >
                 <span>{children}</span>
-            </Link>
+            </NavLink>
         </li>
     );
 };
@@ -75,6 +75,13 @@ export default function GnbMenu() {
         timerRef.current = setTimeout(() => setActiveIndex(null), 400);
     };
 
+    // 메뉴(링크)를 고르면 패널을 닫는다 — 열린 패널이 "준비 중" 안내 모달을 가리지 않게
+    const handleClick = (e: React.MouseEvent) => {
+        if (!(e.target as Element).closest('a')) return;
+        clearTimer();
+        setActiveIndex(null);
+    };
+
     // 컴포넌트가 사라질 때 남은 타이머 정리
     useEffect(() => clearTimer, []);
 
@@ -85,6 +92,7 @@ export default function GnbMenu() {
         <div
             onMouseEnter={clearTimer}
             onMouseLeave={handleLeave}
+            onClick={handleClick}
             onKeyDown={(e) => e.key === 'Escape' && setActiveIndex(null)}
         >
             <ul className="mr-[30px] flex items-start gap-[30px]">
