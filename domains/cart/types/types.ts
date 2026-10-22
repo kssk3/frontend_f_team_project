@@ -22,3 +22,21 @@ export interface CartInput {
     optionID: string;
     quantity: number;
 }
+
+
+// 비회원 장바구니에 기억할 상품 한 개 (zustand)
+export interface GuestCartItem {
+    optionId: string;
+    quantity: number;
+}
+
+// 비회원 장바구니 store의 모양
+export interface CartStore {
+    items: GuestCartItem[];
+    _hasHydrated: boolean;
+    setHasHydrated: (state: boolean) => void;
+    add: (optionId: string, quantity: number) => void;
+    remove: (optionId: string) => void;
+    changeQuantity: (optionId: string, quantity: number) => void;
+    clear: () => void;
+}
