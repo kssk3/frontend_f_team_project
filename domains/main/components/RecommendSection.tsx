@@ -3,12 +3,17 @@
 import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { Swiper as SwiperType } from 'swiper';
-import { mockDiscover } from '@/domains/main/data/mockDiscover';
+import type { DiscoverItem as DiscoverItemData } from '@/domains/main/types';
 import 'swiper/css';
 import NaviButton from './NaviButton';
 import DiscoverItem from './DiscoverItem';
 
-export default function RecommendSection() {
+// 카드 데이터는 밖에서 받는다 — DiscoverSection 이 DB 대표 이미지를 넣어서 넘긴다
+export default function RecommendSection({
+    items,
+}: {
+    items: DiscoverItemData[];
+}) {
     const [swiper, setSwiper] = useState<SwiperType | null>(null);
     const [edge, setEdge] = useState({ isBeginning: true, isEnd: false });
 
@@ -38,8 +43,8 @@ export default function RecommendSection() {
                 onSlideChange={syncEdge}
                 onResize={syncEdge}
             >
-                {mockDiscover.map((item, index) => (
-                    <SwiperSlide key={item.id}>
+                {items.map((item, index) => (
+                    <SwiperSlide key={item.productId}>
                         <DiscoverItem item={item} eager={index < 5} />
                     </SwiperSlide>
                 ))}
