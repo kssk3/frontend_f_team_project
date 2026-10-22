@@ -11,17 +11,20 @@ export default function DisCoverItem({
     eager?: boolean;
 }) {
     return (
-        // 카드 누르면 상품 상세로. id 가 URL 의 [id] 자리에 들어감 (/product/3)
-        <Link href={`/product/${item.id}`} className="block">
+        // 카드 누르면 연결된 DB 상품의 상세로. productId(UUID)가 URL 의 [id] 자리에 들어감
+        <Link href={`/product/${item.productId}`} className="block">
             <div className="relative aspect-[3/4] overflow-hidden bg-[#f2f2f2]">
-                <Image
-                    src={item.image}
-                    alt={item.alt}
-                    fill
-                    sizes="23vw"
-                    loading={eager ? 'eager' : 'lazy'}
-                    className="object-contain"
-                />
+                {/* DB 이미지를 불러오는 동안은 주소가 비어 있어 회색 상자만 보여 준다 */}
+                {item.image && (
+                    <Image
+                        src={item.image}
+                        alt={item.alt}
+                        fill
+                        sizes="23vw"
+                        loading={eager ? 'eager' : 'lazy'}
+                        className="object-contain"
+                    />
+                )}
             </div>
 
             <div className="mt-5 pr-5">
