@@ -33,6 +33,9 @@ for (const [name, value] of [
     ['website', 'javascript:alert(1)'],
     ['website', 'data:text/html,hi'],
     ['website', 'ftp://example.com'],
+    // DB 와 같은 모양(https://호스트[/경로])만 받는다
+    ['website', 'https:///example.com'],
+    ['website', 'https://example.com/a b'],
 ] as const) {
     test(`${name}의 잘못된 값 ${JSON.stringify(value)}를 거부한다`, () => {
         const result = vendorInquirySchema.safeParse({
@@ -148,17 +151,54 @@ test('모든 오류 문구는 EQL 표기처럼 "~해 주세요."로 띄어 쓰�
     }
 });
 
+// 칸 형식에 맞으면서 정확히 length 자인 값
+const EMAIL_DOMAIN = '@example.com';
+const WEBSITE_PREFIX = 'https://example.com/';
+const valueOfLength: Record<
+    keyof typeof VENDOR_TEXT_MAX_LENGTH,
+    (length: number) => string
+> = {
+    companyName: (length) => '가'.repeat(length),
+    brandName: (length) => '가'.repeat(length),
+    contactName: (length) => '가'.repeat(length),
+    phoneNumber: (length) => '0'.repeat(length),
+    mobileNumber: (length) => '0'.repeat(length),
+    email: (length) => 'a'.repeat(length - EMAIL_DOMAIN.length) + EMAIL_DOMAIN,
+    website: (length) =>
+        WEBSITE_PREFIX + 'a'.repeat(length - WEBSITE_PREFIX.length),
+    otherPlatforms: (length) => '가'.repeat(length),
+    content: (length) => '가'.repeat(length),
+};
+
+// DB 제약(db/migrations)과 같은 상한이어야 정상 입력이 DB 에서 거부되지 않는다
 for (const [name, limit] of Object.entries(VENDOR_TEXT_MAX_LENGTH)) {
+    const makeValue = valueOfLength[name as keyof typeof valueOfLength];
+
     test(`${name} 은 ${limit}자까지 허용하고 넘으면 거부한다`, () => {
         const ok = vendorInquirySchema.safeParse({
             ...validInput,
-            [name]: '가'.repeat(limit),
+            [name]: makeValue(limit),
         });
         const over = vendorInquirySchema.safeParse({
             ...validInput,
-            [name]: '가'.repeat(limit + 1),
+            [name]: makeValue(limit + 1),
         });
-        assert.equal(ok.success, true);
+        assert.equal(ok.success, true, JSON.stringify(ok.error?.issues));
         assert.equal(over.success, false);
+        assert.ok(over.error?.issues.some((issue) => issue.path[0] === name));
     });
 }
+
+test('DB 와 같은 상한을 쓴다', () => {
+    assert.deepEqual(VENDOR_TEXT_MAX_LENGTH, {
+        companyName: 50,
+        brandName: 50,
+        contactName: 20,
+        phoneNumber: 20,
+        mobileNumber: 20,
+        email: 254,
+        website: 2048,
+        otherPlatforms: 2000,
+        content: 5000,
+    });
+});

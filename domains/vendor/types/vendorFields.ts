@@ -28,6 +28,7 @@ export const vendorFields = [
         label: '전화번호',
         type: 'tel',
         placeholder: "'-' 없이 숫자만 입력",
+        maxLength: VENDOR_TEXT_MAX_LENGTH.phoneNumber,
     },
     {
         kind: 'select',
@@ -50,18 +51,21 @@ export const vendorFields = [
         label: '담당자 휴대폰 번호',
         type: 'tel',
         placeholder: "'-' 없이 숫자만 입력",
+        maxLength: VENDOR_TEXT_MAX_LENGTH.mobileNumber,
     },
     {
         kind: 'input',
         name: 'email',
         label: '담당자 이메일',
         type: 'email',
+        maxLength: VENDOR_TEXT_MAX_LENGTH.email,
     },
     {
         kind: 'input',
         name: 'website',
         label: '브랜드 웹사이트',
         type: 'url',
+        maxLength: VENDOR_TEXT_MAX_LENGTH.website,
     },
     {
         kind: 'textarea',
@@ -69,6 +73,7 @@ export const vendorFields = [
         label: '타사 입점현황',
         rows: 3,
         optional: true,
+        maxLength: VENDOR_TEXT_MAX_LENGTH.otherPlatforms,
     },
     {
         kind: 'textarea',
@@ -77,5 +82,6 @@ export const vendorFields = [
         rows: 6,
         optional: true,
         placeholder: '내용을 입력해 주세요.',
+        maxLength: VENDOR_TEXT_MAX_LENGTH.content,
     },
 ] as const;

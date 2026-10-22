@@ -151,6 +151,7 @@ export default function VendorInquiryFields({
                             {...fieldProps}
                             rows={field.rows}
                             placeholder={placeholder}
+                            maxLength={field.maxLength}
                             spellCheck={false}
                             defaultValue={initialValues?.[field.name] ?? ''}
                             className={cn(
