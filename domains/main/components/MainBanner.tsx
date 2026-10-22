@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import NavLink from '@/shared/components/NavLink';
 import { mockBanners } from '../data/mockBanners';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
@@ -27,7 +27,7 @@ export default function MainBanner() {
             >
                 {mockBanners.map((banner, index) => (
                     <SwiperSlide key={banner.id}>
-                        <Link href={banner.href} className="block">
+                        <NavLink href={banner.href} className="block">
                             <div className="relative aspect-[1337/827] w-full">
                                 <Image
                                     src={banner.image}
@@ -38,7 +38,7 @@ export default function MainBanner() {
                                     className="object-cover"
                                 />
                             </div>
-                        </Link>
+                        </NavLink>
                     </SwiperSlide>
                 ))}
                 <div slot="container-end">
