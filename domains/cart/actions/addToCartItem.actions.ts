@@ -14,6 +14,10 @@ import { validateCartInput } from '../utils/cartValidation';
 import { getProductStock } from '../queries/getProductStocks.query'; // 상품 옵션의 재고조회
 import { getCartItemByOption } from '../queries/getCartItemByOption.query'; // 이미 담긴 옵션이 있는지 확인
 
+// 화면 새로고침
+import { revalidatePath } from 'next/cache';
+
+
 export async function addToCartItem(
     prevState: ActionState,
     formData: FormData,
@@ -42,10 +46,10 @@ export async function addToCartItem(
     } = await supabase.auth.getUser();
 
     if (!user) {
-        // 비회원의 장바구니 -> 쿠키에 저장 (회원 저장 완성 후 작성예정)
+        // 비회원 → 장바구니는 회원 전용 (상품 페이지에서 로그인 페이지로 보냄)
         return {
             success: false,
-            message: '비회원의 장바구니 담기 기능은 구현 준비중입니다.',
+            message: '로그인 후 이용해 주세요.',
         };
     }
 
@@ -60,17 +64,43 @@ export async function addToCartItem(
         };
     }
 
-    // ② 장바구니에 담을 수량이 재고보다 많으면
-    if (quantity > stock) {
+    // 5) 이미 장바구니에 담긴 옵션인지 조회
+    const cartItem = await getCartItemByOption(user.id, optionId);
+
+    // 담은 뒤의 총 수량 = 기존 수량 + 새로 담을 수량
+    const totalQuantity = (cartItem?.quantity ?? 0) + quantity;
+
+    // ② 담은 뒤의 총 수량이 재고보다 많으면
+    if (totalQuantity > stock) {
         return {
             success: false,
             message: `재고 수량이 부족합니다. 남은수량 : ${stock}개 입니다.`,
         };
     }
 
-    // ) DB에 장바구니 데이터 저장
-    return {
-        success: true,
-        message: '',
-    };
+    // 6) DB에 장바구니 데이터 저장
+    if (cartItem) {
+        // 이미 담긴 옵션 → 수량만 수정
+        const { error } = await supabase
+            .from('cart_items')
+            .update({ quantity: totalQuantity, updated_at: new Date().toISOString() })
+            .eq('id', cartItem.id);
+
+        if (error) {
+            return { success: false, message: '장바구니 담기에 실패했습니다.' };
+        }
+    } else {
+        // 처음 담는 옵션 → 새 줄 추가
+        const { error } = await supabase
+            .from('cart_items')
+            .insert({ user_id: user.id, option_id: optionId, quantity: quantity, is_checked: true });
+
+        if (error) {
+            return { success: false, message: '장바구니 담기에 실패했습니다.' };
+        }
+    }
+
+    // 7) 장바구니 화면을 최신 데이터로 다시 그리기
+    revalidatePath('/cart');
+    return { success: true, message: '장바구니에 담았습니다.' };
 }
