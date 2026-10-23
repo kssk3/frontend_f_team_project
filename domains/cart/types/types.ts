@@ -40,3 +40,46 @@ export interface CartStore {
     changeQuantity: (optionId: string, quantity: number) => void;
     clear: () => void;
 }
+
+// DB가 돌려주는 옵션 한 개의 모양 (queries/getCartItems.query.ts 의 select 문자열과 1:1)
+export interface CartOptionRow {
+    id: string;
+    size: string;
+    extra_price: number | null;
+    stock: number;
+    products: {
+        id: string;
+        name: string;
+        base_price: number;
+        sale_price: number | null;
+        delivery_type: '일반배송' | '판매자배송';
+        delivery_fee: number | null;
+        brands: { name: string } | null;
+        product_images: {
+            image_url: string;
+            sort_order: number;
+            is_thumbnail: boolean;
+            deleted_at: string | null;
+        }[];
+    } | null;
+}
+
+// 배송 그룹 하나 (같은 배송 타입 + 같은 브랜드끼리 묶음)
+export interface CartGroup {
+    key: string;
+    deliveryType: CartItem['deliveryType'];
+    brandName: string;
+    items: CartItem[];
+    productTotal: number;    // 그룹 상품 금액
+    deliveryFee: number;     // 그룹 배송비
+}
+
+// 오른쪽 결제 정보
+export interface CartSummary {
+    groups: CartGroup[];
+    totalProduct: number;    // 총 상품 금액
+    totalDelivery: number;   // 총 배송비
+    totalDiscount: number;   // 총 할인 금액
+    totalPrice: number;      // 총 결제 금액
+    totalCount: number;      // 총 개수
+}

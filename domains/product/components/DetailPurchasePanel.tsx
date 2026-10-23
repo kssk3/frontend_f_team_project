@@ -1,13 +1,12 @@
 'use client';
 
-// 261021 상수로 만든 가짜 값(BASE_PRICE · SIZES …)을 page.tsx 가 넘겨주는 product(DB 값)로 변경
-    // 범위: 화면 바인딩만. 장바구니 서버 액션(<form> · useActionState)은 cart 작업 때 붙임
-       //→ goCart(router.push('/cart')) 는 지금 그대로 둔다
-
+// 261023 팀 장바구니 컴포넌트 추가. 회원은 DB(cart_items)에 장바구니 정보 저장, 비회원은 브라우저(zustand)에 담고 /cart 로 보냄
+// 담기 버튼 2개(PC · 모바일)를 팀 <AddToCartForm/>(PR #53) 으로 교체 
+//        → 이 파일은 "무엇을 담을지"(optionId · quantity)만 넘기고, 담는 방법은 cart 도메인이 맡는다
 
 import { useState } from 'react';
 import { cn } from '@/shared/utils/cn';
-import { useRouter } from 'next/navigation';
+import AddToCartForm from '@/domains/cart/components/AddToCartForm';
 import type { Product } from '@/domains/product/types/product.types';
 
 
@@ -58,7 +57,7 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
    const [optionId, setOptionId] = useState<string | null>(null); // 사이즈 선택 상태
     const [quantity, setQuantity] = useState(1);
     const [liked, setLiked] = useState(false);
-    const router = useRouter();
+
 
     // picked = 고른 옵션 하나 (안 골랐으면 undefined)
     const picked = product.options.find((o) => o.id === optionId);
@@ -80,12 +79,6 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
         setQuantity(1);
     };
     const LikeIcon = liked ? PiRowsFill : PiRowsLight;
-    
-    //사이즈를 고르지 않았으면(picked 없으면) 이동하지 않음
-    const goCart = () => {
-        if (!picked) return;
-        router.push('/cart');
-    };
 
     return (
         <div className="flex flex-col">
@@ -253,14 +246,12 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
 
             {/* "장바구니에 담기" 버튼 2개(데스크톱 · 모바일)는 사이즈를 고르기 전에는 눌리지 않게함 */}
             <div className="mt-4 hidden gap-2 md:flex">
-                <button
-                    type="button"
-                    onClick={goCart}
-                    disabled={!picked}
+                <AddToCartForm 
+                    optionId={picked?.id}
+                    quantity={quantity}
                     className="h-12 flex-1 border border-neutral-900 text-sm font-bold disabled:border-neutral-200 disabled:text-neutral-300"
-                >
-                    장바구니에 담기
-                </button>
+                />
+
                 <button
                     type="button"
                     className="h-12 flex-1 bg-neutral-900 text-sm font-bold text-white"
@@ -279,14 +270,12 @@ export default function DetailPurchasePanel({product}: {product: Product}) {
                 >
                     <LikeIcon size={20} />
                 </button>
-                <button
-                    type="button"
-                    onClick={goCart}
-                    disabled={!picked}
-                    className="h-12 flex-1 border border-neutral-900 text-sm font-bold disabled:border-neutral-200 disabled:text-neutral-300"
-                >
-                    장바구니에 담기
-                </button>
+                <AddToCartForm
+                optionId={picked?.id}
+                quantity={quantity}
+                className="h-12 flex-1 border border-neutral-900 text-sm font-bold disabled:border-neutral-200 disabled:text-neutral-300"
+                />
+
                 <button
                     type="button"
                     className="h-12 flex-1 bg-neutral-900 text-sm font-bold text-white"
