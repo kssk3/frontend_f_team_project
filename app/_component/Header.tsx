@@ -5,6 +5,8 @@ import gnbLogo from './images/gnb_logo.png';
 import { Suspense } from 'react';
 import GnbMenu from './gnb/GnbMenu';
 import AuthMenu from './AuthMenu';
+import CartMenu from './CartMenu';
+import CartBadge from '@/domains/cart/components/CartBadge';
 import {
     Search,
     User,
@@ -25,7 +27,7 @@ const utilMenus = [
     { href: '/mypage', label: '마이페이지', Icon: User },
     { href: '/login', label: '로그인', Icon: LogIn },
     { href: '/equal', label: '이퀄', Icon: StretchHorizontal },
-    { href: '/cart/empty', label: '장바구니', Icon: ShoppingBag },
+    { href: '/cart', label: '장바구니', Icon: ShoppingBag },
 ];
 
 export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
@@ -37,11 +39,6 @@ export function UtilItem({ href, label, icon: Icon }: UtilItemProps) {
                 className="relative block size-7"
             >
                 <Icon className="size-7" strokeWidth={1.5} />
-                {label === '장바구니' && (
-                    <span className="bg-point/90 absolute -top-[5px] left-[14px] h-[18px] w-[19px] rounded-full text-center text-[9px] leading-[19px] font-medium text-white">
-                        0
-                    </span>
-                )}
             </NavLink>
         </li>
     );
@@ -74,6 +71,10 @@ export default function Header() {
                                 <AuthMenu
                                     loginItem={<UtilItem href={href} label={label} icon={Icon} />}
                                 />
+                            </Suspense>
+                        ) : href === '/cart' ? (
+                            <Suspense key={href} fallback={<CartBadge actor="loading" />}>
+                                <CartMenu />
                             </Suspense>
                         ) : (
                             <UtilItem

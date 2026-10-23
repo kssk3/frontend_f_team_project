@@ -2,10 +2,11 @@
 import { Suspense } from 'react';
 import { connection } from 'next/server';
 
-import { createServerClient } from '@/shared/lib/supabase';
+import { getCartActor } from '@/domains/cart/queries/getCartActor.query';
 import CartView, { CartLoading } from '@/domains/cart/components/CartView';
 import GuestCartView from '@/domains/cart/components/GuestCartView';
 import { getMemberCartItems } from '@/domains/cart/queries/getCartItems.query';
+import CartError from '@/domains/cart/components/CartError';
 
 export default function CartPage(): React.JSX.Element {
     return (
@@ -19,15 +20,14 @@ async function CartContent(): Promise<React.JSX.Element> {
     // 로그인 정보(쿠키)를 읽으므로 요청마다 새로 그린다
     await connection();
 
-    const supabase = createServerClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    const actor = await getCartActor();
 
     // 비회원 → 브라우저에 담긴 장바구니
-    if (!user) return <GuestCartView />;
+    if (actor.kind === 'guest') return <GuestCartView />;
+    if (actor.kind === 'error') return <CartError />;
 
     // 회원 → DB 장바구니
-    const items = await getMemberCartItems(user.id);
-    return <CartView items={items} isLoggedIn />;
+    const items = await getMemberCartItems(actor.userId).catch(() => null);
+    if (!items) return <CartError />;
+    return <CartView key={actor.userId} items={items} isLoggedIn />;
 }

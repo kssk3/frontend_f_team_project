@@ -12,7 +12,7 @@ import {
 } from '@/shared/components/ui/dialog';
 
 export default function OptionChangeModal(): React.JSX.Element {
-    const [quantity, setQuantity] = useState(1);   // ← 추가
+    const [quantity, setQuantity] = useState(1);
 
     return (
         <Dialog>
@@ -31,11 +31,16 @@ export default function OptionChangeModal(): React.JSX.Element {
                     <span className="font-medium">M</span>
 
                     <div className="flex items-center border">
-                        <button type="button" className="w-8 h-8" onClick={() => setQuantity(quantity - 1)}>
+                        <button
+                            type="button"
+                            className="w-8 h-8 disabled:opacity-40"
+                            disabled={quantity <= 1}
+                            onClick={() => setQuantity((previous) => Math.max(1, previous - 1))}
+                        >
                             −
                         </button>
                         <span className="w-10 text-center">{quantity}</span>
-                        <button type="button" className="w-8 h-8" onClick={() => setQuantity(quantity + 1)}>
+                        <button type="button" className="w-8 h-8" onClick={() => setQuantity((previous) => previous + 1)}>
                             +
                         </button>
                     </div>

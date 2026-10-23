@@ -1,11 +1,15 @@
 // 장바구니가 비었을 때 화면
 
 import Link from 'next/link';
+import type { Ref } from 'react';
 import { GoChevronRight } from 'react-icons/go'; // > 오른쪽 화살표
 
 import CheckoutStep from './CheckoutStep';
 
-export default function EmptyCart({ isLoggedIn }: { isLoggedIn: boolean }): React.JSX.Element {
+export default function EmptyCart({ isLoggedIn, continueShoppingRef }: {
+    isLoggedIn: boolean;
+    continueShoppingRef?: Ref<HTMLAnchorElement>;
+}): React.JSX.Element {
     return (
         <main>
             <div className="mt-[60px] mr-[30px] ml-[30px]">
@@ -22,6 +26,7 @@ export default function EmptyCart({ isLoggedIn }: { isLoggedIn: boolean }): Reac
 
                     {/* 쇼핑 계속하기 버튼 - 메인 페이지 */}
                     <Link
+                        ref={continueShoppingRef}
                         href="/"
                         className="flex h-[50px] w-[200px] items-center justify-center rounded border-[1.8px] border-black font-medium"
                     >

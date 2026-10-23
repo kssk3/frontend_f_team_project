@@ -6,7 +6,7 @@ export function validateCartInput(input: CartInput): Record<string,string> {
     const errors: Record<string, string> = {};
     
     // 1) 옵션 id가 비어 있지 않은지
-    if (!input.optionID) {
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(input.optionID)) {
         errors.optionID = '옵션을 선택해 주세요.';
     }    
 
