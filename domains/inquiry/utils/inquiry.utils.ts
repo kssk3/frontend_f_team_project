@@ -5,11 +5,11 @@ import type { Inquiry, InquiryRow } from '../types/inquiry.types';
 
 export const INQUIRY_MAX_LENGTH = 1000; // 문의 글자 수 제한
 
-const FORBIDDEN_CHARS = /[\\/:<>|]/; // 파일명 사용 불가능한 문자
+const FORBIDDEN_CHARS = /[\\/:<>]/; // EQL 안내문의 다섯 글자 — 오류 문구 · placeholder 와 같은 집합
 
 // 입력 규칙 - zod4 문법(팀 입점 문의 폼 domains/vendor/validation.ts 참고)
 export const inquirySchema = z.object({
-    productId: z.uuid({ error: '상품 정보가 올바르지 않습니다. '}),
+    productId: z.uuid({ error: '상품 정보가 올바르지 않습니다.' }),
     content: z
         .string()
         .trim()
@@ -72,5 +72,5 @@ const KST_DATE = new Intl.DateTimeFormat('en-CA', {
 
 // 날짜 형식 변환
 export function formatDate(iso: string): string {
-    return KST_DATE.format(new Date(iso)).replaceAll('/', '.');
+    return KST_DATE.format(new Date(iso)).replaceAll('-', '.'); // en-CA 는 'YYYY-MM-DD' → EQL 표기 'YYYY.MM.DD'
 }
