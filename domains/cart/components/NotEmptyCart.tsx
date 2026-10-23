@@ -1,5 +1,8 @@
 // 장바구니에 상품이 있을 때 화면
+'use client';
 
+import { useEffect, useRef, useState, useTransition, type Ref } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { GoChevronRight } from 'react-icons/go'; // > 오른쪽 화살표
 import { IoMdInformationCircleOutline } from 'react-icons/io'; // info 표시
@@ -11,14 +14,93 @@ import CartProductItem from './CartProductItem';
 import RecommendProductCard from './RecommendProductCard';
 import type { CartItem } from '../types/types';
 import { FREE_DELIVERY_PRICE, formatPrice, summarizeCart } from '../utils/cartItem.utils';
+import { useCartStore } from '../stores/useCartStore';
+import { removeCartItems } from '../actions/removeCartItem.actions';
 
 interface NotEmptyCartProps {
     items: CartItem[];
     isLoggedIn: boolean;
+    selectionControlRef: Ref<HTMLInputElement>;
+    onRemovalStart: (ids: string[]) => void;
+    onRemovalEnd: (removedIds: string[]) => void;
+    onRemovalSettled: () => void;
 }
 
-export default function NotEmptyCart({ items, isLoggedIn }: NotEmptyCartProps): React.JSX.Element {
-    const summary = summarizeCart(items);
+export default function NotEmptyCart({
+    items, isLoggedIn, selectionControlRef, onRemovalStart, onRemovalEnd, onRemovalSettled,
+}: NotEmptyCartProps): React.JSX.Element {
+    const router = useRouter();
+    const removeGuestItems = useCartStore((state) => state.removeMany);
+    const [selection, setSelection] = useState({
+        source: items,
+        ids: new Set(items.map((item) => item.id)),
+    });
+    const [message, setMessage] = useState('');
+    const [pending, startTransition] = useTransition();
+    const deleting = useRef(false);
+
+    // A transition's finally runs before pending controls become enabled.
+    useEffect(() => {
+        if (!pending) onRemovalSettled();
+    }, [pending, onRemovalSettled]);
+
+    // Server refreshes replace props; retain only existing choices and select new rows.
+    if (selection.source !== items) {
+        const previousIds = new Set(selection.source.map((item) => item.id));
+        setSelection({
+            source: items,
+            ids: new Set(items
+                .filter((item) => selection.ids.has(item.id) || !previousIds.has(item.id))
+                .map((item) => item.id)),
+        });
+    }
+    const selected = items.filter((item) => selection.ids.has(item.id));
+    const summary = summarizeCart(selected);
+    const visibleGroups = summarizeCart(items).groups;
+    const allChecked = selected.length === items.length;
+    const soldOut = items.filter((item) => item.status === 'soldOut');
+    const toggle = (id: string) => {
+        setSelection((current) => {
+            const ids = new Set(current.ids);
+            if (ids.has(id)) ids.delete(id);
+            else ids.add(id);
+            return { ...current, ids };
+        });
+    };
+    const toggleAll = () => setSelection({
+        source: items,
+        ids: new Set(allChecked ? [] : items.map((item) => item.id)),
+    });
+    const remove = (targets: CartItem[]) => {
+        if (deleting.current || !targets.length) return;
+        onRemovalStart(targets.map((item) => item.id));
+        setMessage('');
+        if (!isLoggedIn) {
+            removeGuestItems(targets.map((item) => item.optionId));
+            return;
+        }
+        deleting.current = true;
+        startTransition(async () => {
+            const removedIds: string[] = [];
+            try {
+                for (let offset = 0; offset < targets.length; offset += 50) {
+                    const ids = targets.slice(offset, offset + 50).map((item) => item.id);
+                    const result = await removeCartItems(ids);
+                    removedIds.push(...result.removedIds);
+                    if (!result.success) {
+                        setMessage(result.message ?? '상품을 삭제하지 못했습니다. 다시 시도해 주세요.');
+                        break;
+                    }
+                }
+            } catch {
+                setMessage('상품을 삭제하지 못했습니다. 다시 시도해 주세요.');
+            } finally {
+                onRemovalEnd(removedIds);
+                if (removedIds.length) router.refresh();
+                deleting.current = false;
+            }
+        });
+    };
 
     return (
         <main>
@@ -52,19 +134,25 @@ export default function NotEmptyCart({ items, isLoggedIn }: NotEmptyCartProps): 
                         {/* 전체 | 선택 삭제 & 품절 삭제 */}
                         <div className="flex items-center justify-between border-b border-black pb-[20px]">
                             <label className="flex items-center gap-2 font-medium">
-                                <input type="checkbox" defaultChecked />
+                                <input ref={selectionControlRef} type="checkbox" checked={allChecked} disabled={pending} onChange={toggleAll} />
                                 <span>전체</span>
                             </label>
 
                             <div className="flex items-center justify-center gap-2 font-medium">
-                                <button type="button">선택 삭제</button>
+                                <button type="button" disabled={pending || selected.length === 0} onClick={() => remove(selected)}>선택 삭제</button>
                                 <RxDividerVertical />
-                                <button type="button">품절 삭제</button>
+                                <button type="button" disabled={pending || soldOut.length === 0} onClick={() => remove(soldOut)}>품절 삭제</button>
                             </div>
                         </div>
 
                         {/* 배송 그룹별 상품 목록 */}
-                        {summary.groups.map((group) => (
+                        {message && <p role="alert" className="py-4 text-sm text-red-600">{message}</p>}
+                        {pending && <p role="status" className="py-4 text-sm">상품을 삭제하는 중입니다…</p>}
+                        {visibleGroups.map((group) => {
+                            const payment = summary.groups.find((selectedGroup) => selectedGroup.key === group.key);
+                            const productTotal = payment?.productTotal ?? 0;
+                            const deliveryFee = payment?.deliveryFee ?? 0;
+                            return (
                             <section key={group.key} className="border-b border-black">
                                 {/* 배송 타입 + 업체명 */}
                                 <h3 className="mt-[30px] text-[14px] font-semibold">
@@ -73,15 +161,22 @@ export default function NotEmptyCart({ items, isLoggedIn }: NotEmptyCartProps): 
 
                                 <ul className="border-secondary flex flex-col gap-[30px] border-b pt-[20px] pb-[30px]">
                                     {group.items.map((item) => (
-                                        <CartProductItem key={item.id} item={item} />
+                                        <CartProductItem
+                                            key={item.id}
+                                            item={item}
+                                            checked={selection.ids.has(item.id)}
+                                            pending={pending}
+                                            onCheckedChange={() => toggle(item.id)}
+                                            onRemove={() => remove([item])}
+                                        />
                                     ))}
                                 </ul>
 
                                 {/* 그룹 결제 금액 */}
                                 <div className="flex items-center justify-center gap-1 py-[30px] text-[16px] font-medium">
-                                    <span>{formatPrice(group.productTotal)}원 + </span>
-                                    <span>배송비 {formatPrice(group.deliveryFee)}원 = </span>
-                                    <span>{formatPrice(group.productTotal + group.deliveryFee)}원</span>
+                                    <span>{formatPrice(productTotal)}원 + </span>
+                                    <span>배송비 {formatPrice(deliveryFee)}원 = </span>
+                                    <span>{formatPrice(productTotal + deliveryFee)}원</span>
 
                                     {/* 배송비 안내 툴팁 */}
                                     <button type="button" className="group relative" aria-label="배송비 안내">
@@ -90,19 +185,20 @@ export default function NotEmptyCart({ items, isLoggedIn }: NotEmptyCartProps): 
                                         </div>
 
                                         <span className="absolute top-full left-1/2 mt-2 hidden -translate-x-1/2 rounded border border-black bg-white px-[30px] py-[20px] text-[14px] whitespace-nowrap group-hover:block group-focus:block">
-                                            {group.deliveryFee === 0
+                                            {deliveryFee === 0
                                                 ? `[${group.deliveryType}] 무료배송`
-                                                : `[${group.deliveryType}] ${formatPrice(FREE_DELIVERY_PRICE)}원 미만 결제 시 배송비 ${formatPrice(group.deliveryFee)}원`}
+                                                : `[${group.deliveryType}] ${formatPrice(FREE_DELIVERY_PRICE)}원 미만 결제 시 배송비 ${formatPrice(deliveryFee)}원`}
                                         </span>
                                     </button>
                                 </div>
                             </section>
-                        ))}
+                            );
+                        })}
 
                         {/* 안내문구 */}
                         <p className="text-subtle flex items-center gap-1 pt-[30px] text-[13px]">
                             <IoMdInformationCircleOutline />
-                            판매 종료된 상품은 장바구니에서 자동 삭제됩니다.
+                            품절 상품은 결제 금액에서 제외됩니다.
                         </p>
 
                         {/* 추천 영역 */}

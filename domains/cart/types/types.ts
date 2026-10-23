@@ -35,11 +35,29 @@ export interface CartStore {
     items: GuestCartItem[];
     _hasHydrated: boolean;
     setHasHydrated: (state: boolean) => void;
+    _metadataVersion: number;
+    retryMetadata: () => void;
     add: (optionId: string, quantity: number) => void;
     remove: (optionId: string) => void;
+    removeMany: (optionIds: string[]) => void;
     changeQuantity: (optionId: string, quantity: number) => void;
     clear: () => void;
 }
+
+export type CartActor =
+    | { kind: 'guest' }
+    | { kind: 'member'; userId: string }
+    | { kind: 'error' };
+
+export type CartAddResult =
+    | { success: true; mode: 'guest' | 'member'; message?: string }
+    | { success: false; message?: string; errors?: Record<string, string> };
+
+export type CartRemoveResult = {
+    success: boolean;
+    removedIds: string[];
+    message?: string;
+};
 
 // DB가 돌려주는 옵션 한 개의 모양 (queries/getCartItems.query.ts 의 select 문자열과 1:1)
 export interface CartOptionRow {

@@ -2,7 +2,7 @@
 // 사용 예) <AddToCartForm optionId={picked?.id} quantity={quantity} className="..." />
 'use client';
 
-import { useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { addToCartItem } from '../actions/addToCartItem.actions';
 import { INITIAL_ACTION_STATE } from '@/shared/types/action.types';
@@ -20,37 +20,47 @@ export default function AddToCartForm({ optionId, quantity, className = DEFAULT_
     const router = useRouter();
     const addToGuestCart = useCartStore((state) => state.add);
     const [isPending, startTransition] = useTransition();
+    const [message, setMessage] = useState('');
+    const adding = useRef(false);
 
     const handleClick = () => {
-        if (!optionId) return;
+        if (!optionId || adding.current) return;
+        adding.current = true;
+        setMessage('');
 
         startTransition(async () => {
             const formData = new FormData();
             formData.append('optionID', optionId);
             formData.append('quantity', String(quantity));
 
-            const result = await addToCartItem(INITIAL_ACTION_STATE, formData);
-
-            if (result.success) {
-                router.push('/cart');
-            } else if (result.message === '로그인 후 이용해 주세요.') {
-                // 비회원 → 브라우저에 기억
-                addToGuestCart(optionId, quantity);
-                router.push('/cart');
-            } else {
-                alert(result.message ?? '장바구니 담기에 실패했습니다.');
+            try {
+                const result = await addToCartItem(INITIAL_ACTION_STATE, formData);
+                if (result.success && (result.mode === 'guest' || result.mode === 'member')) {
+                    if (result.mode === 'guest') addToGuestCart(optionId, quantity);
+                    router.push('/cart');
+                    router.refresh();
+                } else {
+                    setMessage(result.message ?? '장바구니 담기에 실패했습니다.');
+                }
+            } catch {
+                setMessage('장바구니 서비스에 연결하지 못했습니다. 다시 시도해 주세요.');
+            } finally {
+                adding.current = false;
             }
         });
     };
 
     return (
-        <button
-            type="button"
-            onClick={handleClick}
-            disabled={!optionId || isPending}
-            className={className}
-        >
-            {isPending ? '담는 중…' : '장바구니에 담기'}
-        </button>
+        <>
+            <button
+                type="button"
+                onClick={handleClick}
+                disabled={!optionId || isPending}
+                className={className}
+            >
+                {isPending ? '담는 중…' : '장바구니에 담기'}
+            </button>
+            {message && <p role="alert" className="text-sm text-red-600">{message}</p>}
+        </>
     );
 }

@@ -11,12 +11,14 @@ export async function getProductStock(
     const supabase = createServerClient();
 
     // 2) product_options 테이블의 stock 컬럼 데이터 조회
-    const { data: option } = await supabase
+    const { data: option, error } = await supabase
         .from('product_options')
         .select('stock')
         .eq('id', optionID) // 테이블의 id컬럼과 optionID가 같은것
         .is('deleted_at', null) // 삭제날짜가 null인것
         .maybeSingle();
+
+    if (error) throw error;
 
     // 3) 만약, data : option이 없다면 null을 반환하도록
     if (!option) {

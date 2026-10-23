@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="574" viewBox="0 0 960 574" role="img" aria-labelledby="t d">
+<title id="t">브라우저 요청 처리 흐름</title>
+<desc id="d">페이지 열기, 값 입력과 제출, 검증과 저장의 세 단계와 결과 세 가지</desc>
+<style>
+text{font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Segoe UI",sans-serif}
+.bg{fill:#ffffff}.card{fill:#f6f8fa;stroke:#d1d9e0}.div{stroke:#d1d9e0}
+.h{fill:#1f2328;font-size:17px;font-weight:600}.sub{fill:#59636e;font-size:12.5px}
+.st{fill:#1f2328;font-size:14px}.num{fill:#1f2328}.numt{fill:#ffffff;font-size:14px;font-weight:700}
+.rail{stroke:#d1d9e0;stroke-width:2}.chev{fill:#ffffff;stroke:#d1d9e0}.chevp{stroke:#59636e}
+.lg{fill:#59636e;font-size:12.5px}
+.p-browser{fill:#eaeef2}.t-browser{fill:#424a53}.d-browser{fill:#8c959f}
+.p-server{fill:#EEEDFE}.t-server{fill:#3C3489}.d-server{fill:#7F77DD}
+.p-supabase{fill:#E1F5EE}.t-supabase{fill:#085041}.d-supabase{fill:#1D9E75}
+.pt{font-size:11px;font-weight:600}
+.o-fail{fill:#FCEBEB;stroke:#F09595}.ot-fail{fill:#791F1F}
+.o-warn{fill:#FAEEDA;stroke:#EF9F27}.ot-warn{fill:#633806}
+.o-ok{fill:#EAF3DE;stroke:#97C459}.ot-ok{fill:#27500A}
+.oh{font-size:14.5px;font-weight:600}.os{font-size:12.5px}
+@media (prefers-color-scheme:dark){
+.bg{fill:#0d1117}.card{fill:#161b22;stroke:#30363d}.div{stroke:#30363d}
+.h,.st{fill:#e6edf3}.sub,.lg{fill:#9198a1}.num{fill:#e6edf3}.numt{fill:#0d1117}
+.rail{stroke:#30363d}.chev{fill:#0d1117;stroke:#30363d}.chevp{stroke:#9198a1}
+.p-browser{fill:#30363d}.t-browser{fill:#d1d9e0}
+.p-server{fill:#3C3489}.t-server{fill:#CECBF6}
+.p-supabase{fill:#085041}.t-supabase{fill:#9FE1CB}
+.o-fail{fill:#501313;stroke:#A32D2D}.ot-fail{fill:#F7C1C1}
+.o-warn{fill:#412402;stroke:#854F0B}.ot-warn{fill:#FAC775}
+.o-ok{fill:#173404;stroke:#3B6D11}.ot-ok{fill:#C0DD97}}
+</style>
+<rect class="bg" width="960" height="574" rx="12"/>
+<rect class="p-browser" x="24" y="22" width="58" height="20" rx="10"/>
+<text class="pt t-browser" x="53" y="36" text-anchor="middle">브라우저</text>
+<rect class="p-server" x="90" y="22" width="82" height="20" rx="10"/>
+<text class="pt t-server" x="131" y="36" text-anchor="middle">Next.js 서버</text>
+<rect class="p-supabase" x="180" y="22" width="66" height="20" rx="10"/>
+<text class="pt t-supabase" x="213" y="36" text-anchor="middle">Supabase</text>
+<text class="lg" x="260" y="36">누가 처리하는지 색으로 구분</text>
+<rect class="card" x="24" y="64" width="288" height="378" rx="14"/>
+<circle class="num" cx="56" cy="102" r="15"/>
+<text class="numt" x="56" y="107" text-anchor="middle">1</text>
+<text class="h" x="82" y="98">페이지 열기</text>
+<text class="sub" x="82" y="119">화면 뼈대가 먼저, 데이터는 이어서</text>
+<line class="div" x1="40" y1="142" x2="296" y2="142"/>
+<line class="rail" x1="56" y1="182" x2="56" y2="406"/>
+<circle class="d-browser" cx="56" cy="182" r="6"/>
+<rect class="p-browser" x="76" y="160" width="58" height="18" rx="9"/>
+<text class="pt t-browser" x="105" y="173" text-anchor="middle">브라우저</text>
+<text class="st" x="76" y="197">주소 입력 · 메뉴 클릭</text>
+<circle class="d-server" cx="56" cy="238" r="6"/>
+<rect class="p-server" x="76" y="216" width="82" height="18" rx="9"/>
+<text class="pt t-server" x="117" y="229" text-anchor="middle">Next.js 서버</text>
+<text class="st" x="76" y="253">proxy.ts 가 로그인 세션 갱신</text>
+<circle class="d-server" cx="56" cy="294" r="6"/>
+<rect class="p-server" x="76" y="272" width="82" height="18" rx="9"/>
+<text class="pt t-server" x="117" y="285" text-anchor="middle">Next.js 서버</text>
+<text class="st" x="76" y="309">헤더 · 레이아웃 먼저 전송</text>
+<circle class="d-supabase" cx="56" cy="350" r="6"/>
+<rect class="p-supabase" x="76" y="328" width="66" height="18" rx="9"/>
+<text class="pt t-supabase" x="109" y="341" text-anchor="middle">Supabase</text>
+<text class="st" x="76" y="365">로그인 여부 · 상품 데이터 조회</text>
+<circle class="d-browser" cx="56" cy="406" r="6"/>
+<rect class="p-browser" x="76" y="384" width="58" height="18" rx="9"/>
+<text class="pt t-browser" x="105" y="397" text-anchor="middle">브라우저</text>
+<text class="st" x="76" y="421">나머지 화면이 이어서 채워짐</text>
+<circle class="chev" cx="324" cy="102" r="13"/>
+<path class="chevp" d="M321 97 L327 102 L321 107" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect class="card" x="336" y="64" width="288" height="378" rx="14"/>
+<circle class="num" cx="368" cy="102" r="15"/>
+<text class="numt" x="368" y="107" text-anchor="middle">2</text>
+<text class="h" x="394" y="98">값 입력 · 제출</text>
+<text class="sub" x="394" y="119">입력값이 FormData 로 서버에 전달</text>
+<line class="div" x1="352" y1="142" x2="608" y2="142"/>
+<line class="rail" x1="368" y1="182" x2="368" y2="406"/>
+<circle class="d-browser" cx="368" cy="182" r="6"/>
+<rect class="p-browser" x="388" y="160" width="58" height="18" rx="9"/>
+<text class="pt t-browser" x="417" y="173" text-anchor="middle">브라우저</text>
+<text class="st" x="388" y="197">폼에 값 입력</text>
+<circle class="d-browser" cx="368" cy="238" r="6"/>
+<rect class="p-browser" x="388" y="216" width="58" height="18" rx="9"/>
+<text class="pt t-browser" x="417" y="229" text-anchor="middle">브라우저</text>
+<text class="st" x="388" y="253">1차 검증 · 글자 수 · 중복 클릭 방지</text>
+<circle class="d-browser" cx="368" cy="294" r="6"/>
+<rect class="p-browser" x="388" y="272" width="58" height="18" rx="9"/>
+<text class="pt t-browser" x="417" y="285" text-anchor="middle">브라우저</text>
+<text class="st" x="388" y="309">제출 → useActionState</text>
+<circle class="d-server" cx="368" cy="350" r="6"/>
+<rect class="p-server" x="388" y="328" width="82" height="18" rx="9"/>
+<text class="pt t-server" x="429" y="341" text-anchor="middle">Next.js 서버</text>
+<text class="st" x="388" y="365">서버 액션이 FormData 수신</text>
+<circle class="d-server" cx="368" cy="406" r="6"/>
+<rect class="p-server" x="388" y="384" width="82" height="18" rx="9"/>
+<text class="pt t-server" x="429" y="397" text-anchor="middle">Next.js 서버</text>
+<text class="st" x="388" y="421">값 꺼내기 · 앞뒤 공백 정리</text>
+<circle class="chev" cx="636" cy="102" r="13"/>
+<path class="chevp" d="M633 97 L639 102 L633 107" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect class="card" x="648" y="64" width="288" height="378" rx="14"/>
+<circle class="num" cx="680" cy="102" r="15"/>
+<text class="numt" x="680" y="107" text-anchor="middle">3</text>
+<text class="h" x="706" y="98">검증 · 저장</text>
+<text class="sub" x="706" y="119">서버와 DB 가 실제 방어선</text>
+<line class="div" x1="664" y1="142" x2="920" y2="142"/>
+<line class="rail" x1="680" y1="182" x2="680" y2="406"/>
+<circle class="d-server" cx="680" cy="182" r="6"/>
+<rect class="p-server" x="700" y="160" width="82" height="18" rx="9"/>
+<text class="pt t-server" x="741" y="173" text-anchor="middle">Next.js 서버</text>
+<text class="st" x="700" y="197">2차 검증 · zod · 형식 · 길이</text>
+<circle class="d-supabase" cx="680" cy="238" r="6"/>
+<rect class="p-supabase" x="700" y="216" width="66" height="18" rx="9"/>
+<text class="pt t-supabase" x="733" y="229" text-anchor="middle">Supabase</text>
+<text class="st" x="700" y="253">3차 검증 · RLS 권한 · CHECK 제약</text>
+<circle class="d-supabase" cx="680" cy="294" r="6"/>
+<rect class="p-supabase" x="700" y="272" width="66" height="18" rx="9"/>
+<text class="pt t-supabase" x="733" y="285" text-anchor="middle">Supabase</text>
+<text class="st" x="700" y="309">저장 또는 로그인 처리</text>
+<circle class="d-server" cx="680" cy="350" r="6"/>
+<rect class="p-server" x="700" y="328" width="82" height="18" rx="9"/>
+<text class="pt t-server" x="741" y="341" text-anchor="middle">Next.js 서버</text>
+<text class="st" x="700" y="365">ActionState 반환 · revalidatePath</text>
+<circle class="d-browser" cx="680" cy="406" r="6"/>
+<rect class="p-browser" x="700" y="384" width="58" height="18" rx="9"/>
+<text class="pt t-browser" x="729" y="397" text-anchor="middle">브라우저</text>
+<text class="st" x="700" y="421">결과를 화면에 표시</text>
+<text class="lg" x="24" y="472">3단계의 결과는 셋 중 하나로 화면에 돌아옵니다</text>
+<rect class="o-fail" x="24" y="486" width="293.3333333333333" height="64" rx="12"/>
+<text class="oh ot-fail" x="44" y="513">검증 실패</text>
+<text class="os ot-fail" x="44" y="534">칸 아래 오류 표시 · 입력값 유지</text>
+<rect class="o-warn" x="333.3333333333333" y="486" width="293.3333333333333" height="64" rx="12"/>
+<text class="oh ot-warn" x="353.3333333333333" y="513">저장 · 인증 실패</text>
+<text class="os ot-warn" x="353.3333333333333" y="534">안내 문구 · DB 오류 원문은 숨김</text>
+<rect class="o-ok" x="642.6666666666666" y="486" width="293.3333333333333" height="64" rx="12"/>
+<text class="oh ot-ok" x="662.6666666666666" y="513">성공</text>
+<text class="os ot-ok" x="662.6666666666666" y="534">완료 모달 · 이동 · 화면 새로 고침</text>
+</svg>

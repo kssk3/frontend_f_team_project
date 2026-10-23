@@ -7,6 +7,7 @@ export const IMPLEMENTED_ROUTES = [
     '/cart',
     '/cart/empty',
     '/cart/notempty',
+    '/cart/test',
     '/help/vendor',
     '/login',
     '/member/find-id',
@@ -16,6 +17,7 @@ export const IMPLEMENTED_ROUTES = [
     '/member/non-member-order',
     '/member/reset-password',
     '/product/[id]',
+    '/product/[id]/inquiry',
 ] as const;
 
 // '/product/[id]' 의 [id] 처럼 대괄호 칸은 아무 값 한 칸과 맞는다

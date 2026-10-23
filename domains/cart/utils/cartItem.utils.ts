@@ -10,6 +10,10 @@ export const formatPrice = (n: number) => n.toLocaleString('ko-KR');
 // 1개 가격 = 판매가 + 옵션 추가금
 export const unitPrice = (item: CartItem) => item.salePrice + item.extraPrice;
 
+// Header quantity includes all displayed rows, independently of payment selection.
+export const countCartQuantity = (items: readonly CartItem[]) =>
+    items.reduce((sum, item) => sum + item.quantity, 0);
+
 // 대표 이미지: 썸네일 → 없으면 순서가 가장 앞선 이미지
 function pickImage(images: NonNullable<CartOptionRow['products']>['product_images']): string {
     const alive = images.filter((img) => !img.deleted_at);

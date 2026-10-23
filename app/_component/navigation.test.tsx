@@ -18,6 +18,8 @@ import { gnbMenus } from './gnb/gnbMenus';
 
 // Header.tsx 는 로그인 확인(쿠키)을 하는 서버 컴포넌트를 불러오므로 그 부분만 막는다
 vi.mock('./AuthMenu', () => ({ default: () => null }));
+vi.mock('./CartMenu', () => ({ default: () => null }));
+vi.mock('server-only', () => ({}));
 
 // Next 라우터·이미지 최적화 없이 링크 동작만 보기 위해 일반 태그로 바꾼다
 vi.mock('next/link', () => ({

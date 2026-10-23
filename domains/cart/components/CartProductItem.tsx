@@ -19,7 +19,15 @@ const STATUS_LABEL: Record<CartItem['status'], string | null> = {
     notEnough: '재고 부족',
 };
 
-export default function CartProductItem({ item }: { item: CartItem }): React.JSX.Element {
+interface CartProductItemProps {
+    item: CartItem;
+    checked: boolean;
+    pending: boolean;
+    onCheckedChange: () => void;
+    onRemove: () => void;
+}
+
+export default function CartProductItem({ item, checked, pending, onCheckedChange, onRemove }: CartProductItemProps): React.JSX.Element {
     const imageSrc = item.imageUrl.startsWith(ALLOWED_IMAGE_HOST) ? item.imageUrl : fallbackImg;
     const statusLabel = STATUS_LABEL[item.status];
     const isSoldOut = item.status === 'soldOut';
@@ -27,7 +35,7 @@ export default function CartProductItem({ item }: { item: CartItem }): React.JSX
     return (
         <li className="flex items-start gap-[20px]">
             {/* 1. 상품 선택 */}
-            <input type="checkbox" defaultChecked={!isSoldOut} disabled={isSoldOut} aria-label={`${item.productName} 선택`} />
+            <input type="checkbox" checked={checked} onChange={onCheckedChange} disabled={pending} aria-label={`${item.productName} 선택`} />
 
             {/* 2. 상품 대표 이미지 */}
             <Link
@@ -71,7 +79,7 @@ export default function CartProductItem({ item }: { item: CartItem }): React.JSX
             {/* 오른쪽 - 삭제 가격 구매 */}
             <div className="flex w-[280px] flex-col items-center justify-between self-stretch">
                 {/* 위쪽 : 삭제버튼 X 아이콘 */}
-                <button type="button" aria-label="상품 삭제" className="self-end text-[20px]">
+                <button type="button" aria-label={`${item.productName} 삭제`} disabled={pending} onClick={onRemove} className="self-end text-[20px] disabled:opacity-40">
                     <GoX />
                 </button>
 

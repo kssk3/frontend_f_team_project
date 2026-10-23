@@ -12,13 +12,15 @@ export async function getCartItemByOption(
     const supabase = createServerClient();
 
     // 2) cart_items 테이블에서 조회
-    const { data: cartItem } = await supabase
+    const { data: cartItem, error } = await supabase
         .from('cart_items')
         .select('id, quantity')
         .eq('user_id', userID)
         .eq('option_id', optionID)
         .is('deleted_at', null)
         .maybeSingle();
+
+    if (error) throw error;
 
     // 3) 결과 돌려주기
     return cartItem;

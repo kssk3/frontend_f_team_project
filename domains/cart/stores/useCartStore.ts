@@ -17,6 +17,12 @@ export const useCartStore = create<CartStore>()(persist(immer((set) => ({
         set((_state) => {_state._hasHydrated = state});
     },
 
+    // Transient retry coordination only; partialize persists items, never metadata state.
+    _metadataVersion: 0,
+    retryMetadata: () => {
+        set((state) => { state._metadataVersion += 1; });
+    },
+
     // 담기 : 없으면 추가, 이미 있으면 수량 더하기
     add: (optionID: string, quantity: number) => {
         set((state) => {
@@ -38,6 +44,13 @@ export const useCartStore = create<CartStore>()(persist(immer((set) => ({
             if (index !== -1) { // -1은 못 찾은 경우
                 state.items.splice(index, 1);
             }
+        });
+    },
+
+    removeMany: (optionIds: string[]) => {
+        const selected = new Set(optionIds);
+        set((state) => {
+            state.items = state.items.filter((item) => !selected.has(item.optionId));
         });
     },
 
