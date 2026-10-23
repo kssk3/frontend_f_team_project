@@ -10,6 +10,9 @@ import { FiChevronRight } from "react-icons/fi";
 import { createServerClient } from '@/shared/lib/supabase';
 import type { ProductRow } from '@/domains/product/types/product.types';
 import { toProduct } from '@/domains/product/utils/product.utils';
+import InquiryList from '@/domains/inquiry/components/InquiryList';
+import type { InquiryRow } from '@/domains/inquiry/types/inquiry.types';
+import { toInquiry } from '@/domains/inquiry/utils/inquiry.utils';
 
 
 interface ProductDetailPageProps{
@@ -55,6 +58,22 @@ async function ProductDetail({params}: ProductDetailPageProps){
         if (!data) notFound(); // 형식은 맞는데 없는 id · 판매 종료 → 404
         
         const product = toProduct(data); // 그 밖의 오류(네트워크·권한) → 오류 화면
+
+        // 상품 문의 — 표(product_inquiries)가 아니라 뷰(product_inquiries_view)를 읽는다.
+        // 표는 SELECT 권한을 거둬 두었고, 뷰가 비공개 글의 content·answer 를 작성자 본인에게만 주고 남에게는 NULL 로 가린다.
+        // 최신순, 상한 없음 — ponytail: 페이지네이션은 문의가 수십 건을 넘을 때
+        const { data: inquiryRows, error: inquiryError } = await supabase
+            .from('product_inquiries_view')
+            .select('id, product_id, is_public, created_at, is_answered, writer, content, answer')
+            .eq('product_id', product.id)
+            .order('created_at', { ascending: false })
+            .overrideTypes<InquiryRow[], { merge: false }>();
+        if (inquiryError) throw inquiryError;
+        const inquiries = (inquiryRows ?? []).map(toInquiry);
+        // 「문의하기」 분기용 — 로그인했으면 Link, 아니면 로그인 확인 모달 (EQL 흐름). 쿠키의 토큰을 Supabase 에 물어 확인한다
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
         return (
             <>
                 <nav aria-label="현재 위치" className="flex items-center gap-1 text-xs text-neutral-500"
@@ -82,6 +101,8 @@ async function ProductDetail({params}: ProductDetailPageProps){
                             상품 설명이 들어갈 자리입니다.
                         </div>
                     }
+                    inquiry={<InquiryList productId={product.id} items={inquiries} canWrite={Boolean(user)} />}
+                    inquiryCount={inquiries.length}
                 />
             </>
         );
